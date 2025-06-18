@@ -1,4 +1,4 @@
-import { StringToLowerCase, WordsToLowerCase, WordsToUpperCase } from "./non-delimited-cases";
+import { StringToLowerCase, WordsToLowerCaseWords, WordsToUpperCaseWords } from "./non-delimited-cases";
 
 export type SnakeCase = "snake_case";
 export type UpperSnakeCase =
@@ -56,14 +56,14 @@ type WordsToSymbolDelimitedCase<
 
 export type WordsToKebabCase<W extends string[]> = WordsToSymbolDelimitedCase<
   "-",
-  WordsToLowerCase<W>
+  WordsToLowerCaseWords<W>
 >;
 
 export type WordsToUpperKebabCase<W extends string[]> =
-  WordsToSymbolDelimitedCase<"-", WordsToUpperCase<W>>;
+  WordsToSymbolDelimitedCase<"-", WordsToUpperCaseWords<W>>;
 
 export type WordsToSnakeCase<Words extends string[]> =
-  WordsToSymbolDelimitedCase<"_", WordsToLowerCase<Words>>;
+  WordsToSymbolDelimitedCase<"_", WordsToLowerCaseWords<Words>>;
 
 export type WordsToUpperSnakeCase<Words extends string[]> =
-  WordsToSymbolDelimitedCase<"_", WordsToUpperCase<Words>>;
+  WordsToSymbolDelimitedCase<"_", WordsToUpperCaseWords<Words>>;

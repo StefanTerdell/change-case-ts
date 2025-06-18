@@ -1,6 +1,6 @@
-export type UpperCase = "UPPERCASE"
-export type LowerCase = "lowercase"
-export type NonDelimitedCases = UpperCase | LowerCase
+export type UpperCase = "UPPERCASE";
+export type LowerCase = "lowercase";
+export type NonDelimitedCases = UpperCase | LowerCase;
 
 // Lower case
 
@@ -19,11 +19,20 @@ type StringToLowerCaseAcc<
   ? `${Acc}${CharToLowerCase<Head>}${StringToLowerCaseAcc<Tail, Acc>}`
   : String;
 
-export type WordsToLowerCase<
+export type WordsToLowerCaseWords<
   Words extends string[],
   Acc extends string[] = [],
 > = Words extends [infer Head extends string, ...infer Tail extends string[]]
-  ? WordsToLowerCase<Tail, [...Acc, StringToLowerCase<Head>]>
+  ? WordsToLowerCaseWords<Tail, [...Acc, StringToLowerCase<Head>]>
+  : Acc;
+
+export type LowerCaseToWords<String extends string> = [String];
+
+export type WordsToLowerCase<
+  Words extends string[],
+  Acc extends string = "",
+> = Words extends [infer Head extends string, ...infer Tail extends string[]]
+  ? WordsToLowerCase<Tail, `${Acc}${StringToLowerCase<Head>}`>
   : Acc;
 
 // Upper case
@@ -43,11 +52,20 @@ type StringToUpperCaseAcc<
   ? `${Acc}${CharToUpperCase<Head>}${StringToUpperCaseAcc<Tail, Acc>}`
   : String;
 
-export type WordsToUpperCase<
+export type WordsToUpperCaseWords<
   Words extends string[],
   Acc extends string[] = [],
 > = Words extends [infer Head extends string, ...infer Tail extends string[]]
-  ? WordsToUpperCase<Tail, [...Acc, StringToUpperCase<Head>]>
+  ? WordsToUpperCaseWords<Tail, [...Acc, StringToUpperCase<Head>]>
+  : Acc;
+
+export type UpperCaseToWords<String extends string> = [String];
+
+export type WordsToUpperCase<
+  Words extends string[],
+  Acc extends string = "",
+> = Words extends [infer Head extends string, ...infer Tail extends string[]]
+  ? WordsToUpperCase<Tail, `${Acc}${StringToUpperCase<Head>}`>
   : Acc;
 
 // Maps
