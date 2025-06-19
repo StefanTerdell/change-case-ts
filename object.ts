@@ -1,5 +1,5 @@
 import { CaseName } from "./cases.ts";
-import { ChangeStringCase } from "./string.ts";
+import { changeStringCase, ChangeStringCase } from "./string.ts";
 import { UnionToTuple } from "./utils.ts";
 
 export type ChangeObjectCase<
@@ -10,6 +10,21 @@ export type ChangeObjectCase<
   UnionToTuple<keyof Object> extends infer Keys extends string[]
     ? BuildObjectChangedKeys<Object, ChangeKeysCase<Keys, FromCase, ToCase>>
     : Object;
+
+export function changeObjectCase<
+  Object extends { [key: string]: unknown },
+  FromCase extends CaseName,
+  ToCase extends CaseName,
+>(
+  object: Object,
+  fromCase: FromCase,
+  toCase: ToCase,
+): ChangeObjectCase<Object, FromCase, ToCase> {
+  return Object.keys(object).reduce((acc: Record<string, unknown>, key) => {
+    acc[changeStringCase(key, fromCase, toCase)] = object[key as keyof Object];
+    return acc;
+  }, {}) as ChangeObjectCase<Object, FromCase, ToCase>;
+}
 
 type ChangeKeysCase<
   Keys extends string[],
