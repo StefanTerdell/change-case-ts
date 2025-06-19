@@ -21,42 +21,12 @@ type CapitalizationDelimitedCaseToWords<
     ? Words
     : [...Words, StringToLowerCase<Acc>];
 
-export type CamelCaseToWords<String extends string> =
-  CapitalizationDelimitedCaseToWords<String>;
-
-export function camelCaseToWords<String extends string>(
+function capitalizationDelimitedStringToWords<String extends string>(
   string: String,
-): CamelCaseToWords<String> {
+): CapitalizationDelimitedCaseToWords<String> {
   const { words, word } = Array.from(string).reduce(
     (acc: { words: string[]; word: string }, char) => {
-      if (char === char.toLocaleUpperCase()) {
-        acc.words.push(acc.word.toLocaleLowerCase());
-        acc.word = char;
-      } else {
-        acc.word += char;
-      }
-
-      return acc;
-    },
-    { words: [], word: "" },
-  );
-
-  if (word.length) {
-    words.push(word.toLocaleLowerCase());
-  }
-
-  return words as CamelCaseToWords<String>;
-}
-
-export type PascalCaseToWords<S extends string> =
-  CapitalizationDelimitedCaseToWords<S>;
-
-export function pascalCaseToWords<String extends string>(
-  string: String,
-): PascalCaseToWords<String> {
-  const { words, word } = Array.from(string).reduce(
-    (acc: { words: string[]; word: string }, char, index) => {
-      if (char === char.toLocaleUpperCase() && index !== 0) {
+      if (char === char.toLocaleUpperCase() && acc.word.length) {
         acc.words.push(acc.word.toLocaleLowerCase());
         acc.word = char;
       } else {
@@ -73,6 +43,24 @@ export function pascalCaseToWords<String extends string>(
   }
 
   return words as PascalCaseToWords<String>;
+}
+
+export type CamelCaseToWords<String extends string> =
+  CapitalizationDelimitedCaseToWords<String>;
+
+export function camelCaseToWords<String extends string>(
+  string: String,
+): CamelCaseToWords<String> {
+  return capitalizationDelimitedStringToWords(string);
+}
+
+export type PascalCaseToWords<S extends string> =
+  CapitalizationDelimitedCaseToWords<S>;
+
+export function pascalCaseToWords<String extends string>(
+  string: String,
+): PascalCaseToWords<String> {
+  return capitalizationDelimitedStringToWords(string);
 }
 
 export type WordsToCamelCase<
