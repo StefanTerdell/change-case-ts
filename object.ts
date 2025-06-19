@@ -1,6 +1,6 @@
-import { Cases } from "./cases";
-import { ChangeStringCase } from "./string";
-import { UnionToTuple } from "./utils";
+import { Cases } from "./cases.ts";
+import { ChangeStringCase } from "./string.ts";
+import { UnionToTuple } from "./utils.ts";
 
 export type ChangeObjectCase<
   Object extends { [key: string]: unknown },
@@ -31,7 +31,7 @@ type ChangeKeysCase<
 type BuildObjectChangedKeys<
   SourceObject extends { [key: string]: unknown },
   ChangedKeys extends { prevKey: keyof SourceObject; newKey: string }[],
-  Acc extends { [key: string]: unknown } = {},
+  Acc extends { [key: string]: unknown } = { [key: string]: unknown },
 > = ChangedKeys extends [
   {
     prevKey: infer FromKey extends keyof SourceObject;
@@ -45,4 +45,3 @@ type BuildObjectChangedKeys<
       Acc & { [Key in ToKey]: SourceObject[FromKey] }
     >
   : Acc;
-

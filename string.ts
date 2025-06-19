@@ -1,5 +1,5 @@
-import { Cases } from "./cases";
-import { StringToWords, WordsToString } from "./words";
+import { Cases } from "./cases.ts";
+import { StringToWords, WordsToString } from "./words.ts";
 
 export type ChangeStringCase<
   String extends string,

@@ -1,5 +1,5 @@
-import { Cases  } from "./cases";
-import { ChangeStringCase } from "./string";
+import { Cases } from "./cases.ts";
+import { ChangeStringCase } from "./string.ts";
 
 export type ChangeTupleCase<
   Tuple extends unknown[],

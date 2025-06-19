@@ -1,4 +1,8 @@
-import { StringToLowerCase, WordsToLowerCaseWords, WordsToUpperCaseWords } from "./non-delimited-cases";
+import {
+  StringToLowerCase,
+  WordsToLowerCaseWords,
+  WordsToUpperCaseWords,
+} from "./non-delimited-cases.ts";
 
 export type SnakeCase = "snake_case";
 export type UpperSnakeCase =

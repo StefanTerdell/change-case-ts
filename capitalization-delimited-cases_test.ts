@@ -3,7 +3,7 @@ import {
   PascalCaseToWords,
   WordsToCamelCase,
   WordsToPascalCase,
-} from "./capitalization-delimited-cases";
+} from "./capitalization-delimited-cases.ts";
 
 ["din", "mamma", "en", "pappa"] satisfies PascalCaseToWords<"DinMammaEnPappa"> &
   CamelCaseToWords<"dinMammaEnPappa">;

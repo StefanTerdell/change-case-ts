@@ -1,4 +1,4 @@
-import { Cases } from "./cases";
+import { Cases } from "./cases.ts";
 import {
   CamelCase,
   CamelCaseToWords,
@@ -6,7 +6,7 @@ import {
   PascalCaseToWords,
   WordsToCamelCase,
   WordsToPascalCase,
-} from "./capitalization-delimited-cases";
+} from "./capitalization-delimited-cases.ts";
 import {
   LowerCase,
   LowerCaseToWords,
@@ -14,7 +14,7 @@ import {
   UpperCaseToWords,
   WordsToLowerCase,
   WordsToUpperCase,
-} from "./non-delimited-cases";
+} from "./non-delimited-cases.ts";
 import {
   KebabCase,
   KebabCaseToWords,
@@ -28,7 +28,7 @@ import {
   WordsToSnakeCase,
   WordsToUpperKebabCase,
   WordsToUpperSnakeCase,
-} from "./symbol-delimited-cases";
+} from "./symbol-delimited-cases.ts";
 
 export type WordsToString<
   Case extends Cases,

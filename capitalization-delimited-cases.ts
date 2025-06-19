@@ -1,9 +1,9 @@
-import { StringToLowerCase } from "./non-delimited-cases";
-import { CharToUpperCase } from "./non-delimited-cases";
+import { StringToLowerCase } from "./non-delimited-cases.ts";
+import { CharToUpperCase } from "./non-delimited-cases.ts";
 
 export type CamelCase = "camelCase";
 export type PascalCase = "PascalCase";
-export type CapitalizationDelimitedCases = CamelCase | PascalCase
+export type CapitalizationDelimitedCases = CamelCase | PascalCase;
 
 type CapitalizationDelimitedCaseToWords<
   String extends string,
