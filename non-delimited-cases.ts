@@ -1,6 +1,22 @@
-export type UpperCase = "UPPERCASE";
-export type LowerCase = "lowercase";
-export type NonDelimitedCases = UpperCase | LowerCase;
+export type UpperCaseName = "UPPERCASE";
+
+export function isUpperCaseName(caseName: string): caseName is UpperCaseName {
+  return caseName === ("UPPERCASE" satisfies UpperCaseName);
+}
+
+export type LowerCaseName = "lowercase";
+
+export function isLowerCaseName(caseName: string): caseName is LowerCaseName {
+  return caseName === ("lowercase" satisfies LowerCaseName);
+}
+
+export type NonDelimitedCaseName = UpperCaseName | LowerCaseName;
+
+export function isNonDelimitedCaseName(
+  caseName: string,
+): caseName is NonDelimitedCaseName {
+  return isUpperCaseName(caseName) || isLowerCaseName(caseName);
+}
 
 // Lower case
 

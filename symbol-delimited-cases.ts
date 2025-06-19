@@ -4,18 +4,60 @@ import {
   WordsToUpperCaseWords,
 } from "./non-delimited-cases.ts";
 
-export type SnakeCase = "snake_case";
-export type UpperSnakeCase =
+export type SnakeCaseName = "snake_case";
+
+export function isSnakeCaseName(caseName: string): caseName is SnakeCaseName {
+  return caseName === ("snake_case" satisfies SnakeCaseName);
+}
+
+export type UpperSnakeCaseName =
   | "UPPER_SNAKE_CASE"
   | "SCREAMING_SNAKE_CASE"
   | "CONSTANT_CASE";
-export type KebabCase = "kebab-case";
-export type UpperKebabCase = "UPPER-KEBAB-CASE" | "SCREAMING-KEBAB-CASE";
-export type SymbolDelimitedCases =
-  | SnakeCase
-  | KebabCase
-  | UpperSnakeCase
-  | UpperKebabCase;
+
+export function isUpperSnakeCaseName(
+  caseName: string,
+): caseName is UpperSnakeCaseName {
+  return (
+    caseName === ("UPPER_SNAKE_CASE" satisfies UpperSnakeCaseName) ||
+    caseName === ("SCREAMING_SNAKE_CASE" satisfies UpperSnakeCaseName) ||
+    caseName === ("CONSTANT_CASE" satisfies UpperSnakeCaseName)
+  );
+}
+
+export type KebabCaseName = "kebab-case";
+
+export function isKebabCaseName(caseName: string): caseName is KebabCaseName {
+  return caseName === ("kebab-case" satisfies KebabCaseName);
+}
+
+export type UpperKebabCaseName = "UPPER-KEBAB-CASE" | "SCREAMING-KEBAB-CASE";
+
+export function isUpperKebabCaseName(
+  caseName: string,
+): caseName is UpperKebabCaseName {
+  return (
+    caseName === ("UPPER-KEBAB-CASE" satisfies UpperKebabCaseName) ||
+    caseName === ("SCREAMING-KEBAB-CASE" satisfies UpperKebabCaseName)
+  );
+}
+
+export type SymbolDelimitedCaseName =
+  | SnakeCaseName
+  | KebabCaseName
+  | UpperSnakeCaseName
+  | UpperKebabCaseName;
+
+export function isSymbolDelimitedCaseName(
+  caseName: string,
+): caseName is SymbolDelimitedCaseName {
+  return (
+    isSnakeCaseName(caseName) ||
+    isKebabCaseName(caseName) ||
+    isUpperSnakeCaseName(caseName) ||
+    isUpperKebabCaseName(caseName)
+  );
+}
 
 type SymbolDelimitedCaseToWords<
   Delimiter extends string,

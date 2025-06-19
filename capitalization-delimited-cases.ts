@@ -1,9 +1,25 @@
 import { StringToLowerCase } from "./non-delimited-cases.ts";
 import { CharToUpperCase } from "./non-delimited-cases.ts";
 
-export type CamelCase = "camelCase";
-export type PascalCase = "PascalCase";
-export type CapitalizationDelimitedCases = CamelCase | PascalCase;
+export type CamelCaseName = "camelCase";
+
+export function isCamelCaseName(caseName: string): caseName is CamelCaseName {
+  return caseName === ("camelCase" satisfies CamelCaseName);
+}
+
+export type PascalCaseName = "PascalCase";
+
+export function isPascalCaseName(caseName: string): caseName is PascalCaseName {
+  return caseName === ("PascalCase" satisfies PascalCaseName);
+}
+
+export type CapitalizationDelimitedCaseName = CamelCaseName | PascalCaseName;
+
+export function isCapitalizationDelimitedCaseName(
+  caseName: string,
+): caseName is CapitalizationDelimitedCaseName {
+  return isCamelCaseName(caseName) || isPascalCaseName(caseName);
+}
 
 type CapitalizationDelimitedCaseToWords<
   String extends string,

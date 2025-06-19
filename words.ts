@@ -1,28 +1,28 @@
-import { Cases } from "./cases.ts";
+import { CaseName } from "./cases.ts";
 import {
-  CamelCase,
+  CamelCaseName,
   CamelCaseToWords,
-  PascalCase,
+  PascalCaseName,
   PascalCaseToWords,
   WordsToCamelCase,
   WordsToPascalCase,
 } from "./capitalization-delimited-cases.ts";
 import {
-  LowerCase,
+  LowerCaseName,
   LowerCaseToWords,
-  UpperCase,
+  UpperCaseName,
   UpperCaseToWords,
   WordsToLowerCase,
   WordsToUpperCase,
 } from "./non-delimited-cases.ts";
 import {
-  KebabCase,
+  KebabCaseName,
   KebabCaseToWords,
-  SnakeCase,
+  SnakeCaseName,
   SnakeCaseToWords,
-  UpperKebabCase,
+  UpperKebabCaseName,
   UpperKebabCaseToWords,
-  UpperSnakeCase,
+  UpperSnakeCaseName,
   UpperSnakeCaseToWords,
   WordsToKebabCase,
   WordsToSnakeCase,
@@ -31,23 +31,23 @@ import {
 } from "./symbol-delimited-cases.ts";
 
 export type WordsToString<
-  Case extends Cases,
+  Case extends CaseName,
   Words extends string[],
-> = Case extends LowerCase
+> = Case extends LowerCaseName
   ? WordsToLowerCase<Words>
-  : Case extends UpperCase
+  : Case extends UpperCaseName
     ? WordsToUpperCase<Words>
-    : Case extends CamelCase
+    : Case extends CamelCaseName
       ? WordsToCamelCase<Words>
-      : Case extends PascalCase
+      : Case extends PascalCaseName
         ? WordsToPascalCase<Words>
-        : Case extends SnakeCase
+        : Case extends SnakeCaseName
           ? WordsToSnakeCase<Words>
-          : Case extends UpperSnakeCase
+          : Case extends UpperSnakeCaseName
             ? WordsToUpperSnakeCase<Words>
-            : Case extends KebabCase
+            : Case extends KebabCaseName
               ? WordsToKebabCase<Words>
-              : Case extends UpperKebabCase
+              : Case extends UpperKebabCaseName
                 ? WordsToUpperKebabCase<Words>
                 : WordsToStringAcc<Words>;
 
@@ -59,22 +59,22 @@ type WordsToStringAcc<
   : Acc;
 
 export type StringToWords<
-  Case extends Cases,
+  Case extends CaseName,
   String extends string,
-> = Case extends LowerCase
+> = Case extends LowerCaseName
   ? LowerCaseToWords<String>
-  : Case extends UpperCase
+  : Case extends UpperCaseName
     ? UpperCaseToWords<String>
-    : Case extends CamelCase
+    : Case extends CamelCaseName
       ? CamelCaseToWords<String>
-      : Case extends PascalCase
+      : Case extends PascalCaseName
         ? PascalCaseToWords<String>
-        : Case extends SnakeCase
+        : Case extends SnakeCaseName
           ? SnakeCaseToWords<String>
-          : Case extends UpperSnakeCase
+          : Case extends UpperSnakeCaseName
             ? UpperSnakeCaseToWords<String>
-            : Case extends KebabCase
+            : Case extends KebabCaseName
               ? KebabCaseToWords<String>
-              : Case extends UpperKebabCase
+              : Case extends UpperKebabCaseName
                 ? UpperKebabCaseToWords<String>
                 : [String];
