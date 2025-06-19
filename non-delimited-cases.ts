@@ -7,10 +7,28 @@ export type NonDelimitedCases = UpperCase | LowerCase;
 export type CharToLowerCase<Char extends string> =
   Char extends keyof LowerCaseCharMap ? LowerCaseCharMap[Char] : Char;
 
+export function charToLowerCase<const Char extends string>(
+  char: Char,
+): CharToLowerCase<Char> {
+  return (
+    char in lowerCaseCharMap
+      ? lowerCaseCharMap[char as keyof LowerCaseCharMap]
+      : char
+  ) as CharToLowerCase<Char>;
+}
+
 export type StringToLowerCase<String extends string> = StringToLowerCaseAcc<
   String,
   ""
 >;
+
+export function stringToLowerCase<const String extends string>(
+  string: String,
+): StringToLowerCase<String> {
+  return Array.from(string)
+    .map((char) => charToLowerCase(char))
+    .join("") as StringToLowerCase<String>;
+}
 
 type StringToLowerCaseAcc<
   String extends string,
@@ -19,6 +37,7 @@ type StringToLowerCaseAcc<
   ? `${Acc}${CharToLowerCase<Head>}${StringToLowerCaseAcc<Tail, Acc>}`
   : String;
 
+/** @internal */
 export type WordsToLowerCaseWords<
   Words extends string[],
   Acc extends string[] = [],
@@ -26,7 +45,24 @@ export type WordsToLowerCaseWords<
   ? WordsToLowerCaseWords<Tail, [...Acc, StringToLowerCase<Head>]>
   : Acc;
 
-export type LowerCaseToWords<String extends string> = [String];
+/** @internal */
+export function wordsToLowerCaseWords<const Words extends string[]>(
+  words: Words,
+): WordsToLowerCaseWords<Words> {
+  return words.map((word) =>
+    stringToLowerCase(word),
+  ) as WordsToLowerCaseWords<Words>;
+}
+
+export type LowerCaseToWords<String extends string> = [
+  StringToLowerCase<String>,
+];
+
+export function lowerCaseToWords<const String extends string>(
+  string: String,
+): LowerCaseToWords<String> {
+  return [stringToLowerCase(string)];
+}
 
 export type WordsToLowerCase<
   Words extends string[],
@@ -35,15 +71,41 @@ export type WordsToLowerCase<
   ? WordsToLowerCase<Tail, `${Acc}${StringToLowerCase<Head>}`>
   : Acc;
 
+export function wordsToLowerCase<const Words extends string[]>(
+  words: Words,
+): WordsToLowerCase<Words> {
+  return words
+    .map((word) => stringToLowerCase(word))
+    .join("") as WordsToLowerCase<Words>;
+}
+
 // Upper case
 
 export type CharToUpperCase<Char extends string> =
   Char extends keyof UpperCaseCharMap ? UpperCaseCharMap[Char] : Char;
 
+export function charToUpperCase<const Char extends string>(
+  char: Char,
+): CharToUpperCase<Char> {
+  return (
+    char in upperCaseCharMap
+      ? upperCaseCharMap[char as keyof UpperCaseCharMap]
+      : char
+  ) as CharToUpperCase<Char>;
+}
+
 export type StringToUpperCase<String extends string> = StringToUpperCaseAcc<
   String,
   ""
 >;
+
+export function stringToUpperCase<const String extends string>(
+  string: String,
+): StringToUpperCase<String> {
+  return Array.from(string)
+    .map((char) => charToUpperCase(char))
+    .join("") as StringToUpperCase<String>;
+}
 
 type StringToUpperCaseAcc<
   String extends string,
@@ -59,7 +121,21 @@ export type WordsToUpperCaseWords<
   ? WordsToUpperCaseWords<Tail, [...Acc, StringToUpperCase<Head>]>
   : Acc;
 
+export function wordsToUpperCaseWords<const Words extends string[]>(
+  words: Words,
+): WordsToUpperCaseWords<Words> {
+  return words.map((word) =>
+    stringToUpperCase(word),
+  ) as WordsToUpperCaseWords<Words>;
+}
+
 export type UpperCaseToWords<String extends string> = [String];
+
+export function upperCaseToWords<const String extends string>(
+  string: String,
+): UpperCaseToWords<String> {
+  return [stringToUpperCase(string)] as UpperCaseToWords<String>;
+}
 
 export type WordsToUpperCase<
   Words extends string[],
@@ -68,160 +144,171 @@ export type WordsToUpperCase<
   ? WordsToUpperCase<Tail, `${Acc}${StringToUpperCase<Head>}`>
   : Acc;
 
+export function wordsToUpperCase<const Words extends string[]>(
+  words: Words,
+): WordsToUpperCase<Words> {
+  return words
+    .map((word) => stringToUpperCase(word))
+    .join("") as WordsToUpperCase<Words>;
+}
+
 // Maps
+export type LowerCaseCharMap = typeof lowerCaseCharMap;
 
-export type LowerCaseCharMap = {
-  A: "a";
-  B: "b";
-  C: "c";
-  D: "d";
-  E: "e";
-  F: "f";
-  G: "g";
-  H: "h";
-  I: "i";
-  J: "j";
-  K: "k";
-  L: "l";
-  M: "m";
-  N: "n";
-  O: "o";
-  P: "p";
-  Q: "q";
-  R: "r";
-  S: "s";
-  T: "t";
-  U: "u";
-  V: "v";
-  W: "w";
-  X: "x";
-  Y: "y";
-  Z: "z";
+export const lowerCaseCharMap = {
+  A: "a" as const,
+  B: "b" as const,
+  C: "c" as const,
+  D: "d" as const,
+  E: "e" as const,
+  F: "f" as const,
+  G: "g" as const,
+  H: "h" as const,
+  I: "i" as const,
+  J: "j" as const,
+  K: "k" as const,
+  L: "l" as const,
+  M: "m" as const,
+  N: "n" as const,
+  O: "o" as const,
+  P: "p" as const,
+  Q: "q" as const,
+  R: "r" as const,
+  S: "s" as const,
+  T: "t" as const,
+  U: "u" as const,
+  V: "v" as const,
+  W: "w" as const,
+  X: "x" as const,
+  Y: "y" as const,
+  Z: "z" as const,
 
-  À: "à";
-  Á: "á";
-  Â: "â";
-  Ã: "ã";
-  Ä: "ä";
-  Å: "å";
-  Æ: "æ";
-  Ç: "ç";
-  È: "è";
-  É: "é";
-  Ê: "ê";
-  Ë: "ë";
-  Ì: "ì";
-  Í: "í";
-  Î: "î";
-  Ï: "ï";
-  Ð: "ð";
-  Ñ: "ñ";
-  Ò: "ò";
-  Ó: "ó";
-  Ô: "ô";
-  Õ: "õ";
-  Ö: "ö";
-  Ø: "ø";
-  Ù: "ù";
-  Ú: "ú";
-  Û: "û";
-  Ü: "ü";
-  Ý: "ý";
-  Þ: "þ";
-  ẞ: "ß"; // capital sharp S to lowercase ß
+  À: "à" as const,
+  Á: "á" as const,
+  Â: "â" as const,
+  Ã: "ã" as const,
+  Ä: "ä" as const,
+  Å: "å" as const,
+  Æ: "æ" as const,
+  Ç: "ç" as const,
+  È: "è" as const,
+  É: "é" as const,
+  Ê: "ê" as const,
+  Ë: "ë" as const,
+  Ì: "ì" as const,
+  Í: "í" as const,
+  Î: "î" as const,
+  Ï: "ï" as const,
+  Ð: "ð" as const,
+  Ñ: "ñ" as const,
+  Ò: "ò" as const,
+  Ó: "ó" as const,
+  Ô: "ô" as const,
+  Õ: "õ" as const,
+  Ö: "ö" as const,
+  Ø: "ø" as const,
+  Ù: "ù" as const,
+  Ú: "ú" as const,
+  Û: "û" as const,
+  Ü: "ü" as const,
+  Ý: "ý" as const,
+  Þ: "þ" as const,
+  ẞ: "ß" as const, // capital sharp S to lowercase ß
 
-  Œ: "œ";
-  Š: "š";
-  Ž: "ž";
-  Č: "č";
-  Ď: "ď";
-  Ě: "ě";
-  Ľ: "ľ";
-  Ĺ: "ĺ";
-  Ń: "ń";
-  Ŕ: "ŕ";
-  Ś: "ś";
-  Ť: "ť";
-  Ź: "ź";
-  Ż: "ż";
+  Œ: "œ" as const,
+  Š: "š" as const,
+  Ž: "ž" as const,
+  Č: "č" as const,
+  Ď: "ď" as const,
+  Ě: "ě" as const,
+  Ľ: "ľ" as const,
+  Ĺ: "ĺ" as const,
+  Ń: "ń" as const,
+  Ŕ: "ŕ" as const,
+  Ś: "ś" as const,
+  Ť: "ť" as const,
+  Ź: "ź" as const,
+  Ż: "ż" as const,
 
   // Add additional entries as needed
 };
 
-export type UpperCaseCharMap = {
-  a: "A";
-  b: "B";
-  c: "C";
-  d: "D";
-  e: "E";
-  f: "F";
-  g: "G";
-  h: "H";
-  i: "I";
-  j: "J";
-  k: "K";
-  l: "L";
-  m: "M";
-  n: "N";
-  o: "O";
-  p: "P";
-  q: "Q";
-  r: "R";
-  s: "S";
-  t: "T";
-  u: "U";
-  v: "V";
-  w: "W";
-  x: "X";
-  y: "Y";
-  z: "Z";
+export type UpperCaseCharMap = typeof upperCaseCharMap;
 
-  à: "À";
-  á: "Á";
-  â: "Â";
-  ã: "Ã";
-  ä: "Ä";
-  å: "Å";
-  æ: "Æ";
-  ç: "Ç";
-  è: "È";
-  é: "É";
-  ê: "Ê";
-  ë: "Ë";
-  ì: "Ì";
-  í: "Í";
-  î: "Î";
-  ï: "Ï";
-  ð: "Ð";
-  ñ: "Ñ";
-  ò: "Ò";
-  ó: "Ó";
-  ô: "Ô";
-  õ: "Õ";
-  ö: "Ö";
-  ø: "Ø";
-  ù: "Ù";
-  ú: "Ú";
-  û: "Û";
-  ü: "Ü";
-  ý: "Ý";
-  þ: "Þ";
-  ß: "ẞ"; // German sharp S, maps to capital ẞ in Unicode
+export const upperCaseCharMap = {
+  a: "A" as const,
+  b: "B" as const,
+  c: "C" as const,
+  d: "D" as const,
+  e: "E" as const,
+  f: "F" as const,
+  g: "G" as const,
+  h: "H" as const,
+  i: "I" as const,
+  j: "J" as const,
+  k: "K" as const,
+  l: "L" as const,
+  m: "M" as const,
+  n: "N" as const,
+  o: "O" as const,
+  p: "P" as const,
+  q: "Q" as const,
+  r: "R" as const,
+  s: "S" as const,
+  t: "T" as const,
+  u: "U" as const,
+  v: "V" as const,
+  w: "W" as const,
+  x: "X" as const,
+  y: "Y" as const,
+  z: "Z" as const,
 
-  œ: "Œ"; // French ligature
-  š: "Š"; // Common in Czech, Slovak, etc.
-  ž: "Ž"; // Common in Czech, Slovenian, etc.
-  č: "Č";
-  ď: "Ď";
-  ě: "Ě";
-  ľ: "Ľ";
-  ĺ: "Ĺ";
-  ń: "Ń";
-  ŕ: "Ŕ";
-  ś: "Ś";
-  ť: "Ť";
-  ź: "Ź";
-  ż: "Ż";
+  à: "À" as const,
+  á: "Á" as const,
+  â: "Â" as const,
+  ã: "Ã" as const,
+  ä: "Ä" as const,
+  å: "Å" as const,
+  æ: "Æ" as const,
+  ç: "Ç" as const,
+  è: "È" as const,
+  é: "É" as const,
+  ê: "Ê" as const,
+  ë: "Ë" as const,
+  ì: "Ì" as const,
+  í: "Í" as const,
+  î: "Î" as const,
+  ï: "Ï" as const,
+  ð: "Ð" as const,
+  ñ: "Ñ" as const,
+  ò: "Ò" as const,
+  ó: "Ó" as const,
+  ô: "Ô" as const,
+  õ: "Õ" as const,
+  ö: "Ö" as const,
+  ø: "Ø" as const,
+  ù: "Ù" as const,
+  ú: "Ú" as const,
+  û: "Û" as const,
+  ü: "Ü" as const,
+  ý: "Ý" as const,
+  þ: "Þ" as const,
+  ß: "ẞ" as const, // German sharp S, maps to capital ẞ in Unicode
+
+  œ: "Œ" as const, // French ligature
+  š: "Š" as const, // Common in Czech, Slovak, etc.
+  ž: "Ž" as const, // Common in Czech, Slovenian, etc.
+  č: "Č" as const,
+  ď: "Ď" as const,
+  ě: "Ě" as const,
+  ľ: "Ľ" as const,
+  ĺ: "Ĺ" as const,
+  ń: "Ń" as const,
+  ŕ: "Ŕ" as const,
+  ś: "Ś" as const,
+  ť: "Ť" as const,
+  ź: "Ź" as const,
+  ż: "Ż" as const,
 
   // Add any additional characters you may require
 };
