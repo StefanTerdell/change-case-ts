@@ -10,7 +10,7 @@ import {
   upperCaseToWords,
   wordsToLowerCase,
   wordsToUpperCase,
-} from "./non-delimited-cases.ts";
+} from "../src/non-delimited-cases.ts";
 
 "abc__d" satisfies StringToLowerCase<"AbC__d">;
 // @ts-expect-error: test

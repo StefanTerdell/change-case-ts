@@ -7,7 +7,7 @@ import {
   WordsToPascalCase,
   camelCaseToWords,
   pascalCaseToWords,
-} from "./capitalization-delimited-cases.ts";
+} from "../src/capitalization-delimited-cases.ts";
 
 import { assertEquals } from "@std/assert";
 

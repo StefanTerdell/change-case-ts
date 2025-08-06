@@ -16,7 +16,7 @@ import {
   WordsToUpperKebabCase,
   wordsToUpperSnakeCase,
   WordsToUpperSnakeCase,
-} from "./symbol-delimited-cases.ts";
+} from "../src/symbol-delimited-cases.ts";
 
 "din-mamma-en-pappa" satisfies WordsToKebabCase<
   ["din", "MAMMA", "en", "pApPa"]

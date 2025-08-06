@@ -1,9 +1,12 @@
 import {
   CamelCaseName,
   PascalCaseName,
-} from "./capitalization-delimited-cases.ts";
-import { ChangeObjectCase } from "./object.ts";
-import { SnakeCaseName, UpperKebabCaseName } from "./symbol-delimited-cases.ts";
+} from "../src/capitalization-delimited-cases.ts";
+import { ChangeObjectCase } from "../src/object.ts";
+import {
+  SnakeCaseName,
+  UpperKebabCaseName,
+} from "../src/symbol-delimited-cases.ts";
 
 ({
   HelloWorld: true,
