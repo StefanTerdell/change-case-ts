@@ -13,6 +13,42 @@ import type {
 } from "../src/symbol-delimited-cases.ts";
 import { assertEqualsT } from "./utils.ts";
 
+Deno.test("changeKeysCase - camelCase to PascalCase, recursive", () => {
+  ({
+    HelloWorld: true,
+    Nested: {
+      Prop: 0,
+    },
+    Arr: [{
+      Hello: "again",
+    }],
+  }) satisfies ChangeKeysCase<
+    { helloWorld: boolean; nested: { prop: 0 }; arr: [{ hello: "again" }] },
+    CamelCaseName,
+    PascalCaseName
+  >;
+
+  assertEqualsT(
+    changeKeysCase(
+      [{
+        fee: [{
+          fy: [{
+            fo: "fum",
+          }],
+        }],
+      }],
+      "camelCase",
+      "PascalCase",
+    ),
+    [{
+      "Fee": [{
+        "Fy": [{
+          "Fo": "fum",
+        }],
+      }],
+    }],
+  );
+});
 Deno.test("changeKeysCase - camelCase to PascalCase", () => {
   ({
     HelloWorld: true,

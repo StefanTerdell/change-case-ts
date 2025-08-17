@@ -23,7 +23,7 @@ import type { Writeable } from "./utils.ts";
 export type DetectCaseName<Value> = Value extends string
   ? DetectCaseNameFromString<Value>
   : Value extends readonly unknown[] ? DetectCaseNameFromArray<Writeable<Value>>
-  : Value extends { [key: string]: unknown } ? DetectCaseNameFromKeys<Value>
+  : Value extends object ? DetectCaseNameFromKeys<Value>
   : undefined;
 
 /** Attempts to identify the common CaseName of a provided value. */

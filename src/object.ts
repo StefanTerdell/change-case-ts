@@ -10,7 +10,7 @@ import {
   type DetectCaseNameFromArray,
   detectCaseNameFromArray,
 } from "./array.ts";
-import type { UnionToTuple } from "./utils.ts";
+import { type DeepKeyOf, deepKeyOf, type UnionToTuple } from "./utils.ts";
 
 /** Attempts to identify the shared CaseName of the keys of an object type and return a CaseName. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
  *
@@ -19,8 +19,13 @@ import type { UnionToTuple } from "./utils.ts";
  * const case: DetectCaseNameFromKeys({ fooBar: 0, baz: 0 }) = "camelCase";
  * ```
  */
-export type DetectCaseNameFromKeys<Object extends { [key: string]: unknown }> =
-  DetectCaseNameFromArray<UnionToTuple<keyof Object>>;
+export type DetectCaseNameFromKeys<
+  Object extends object,
+> = DetectCaseNameFromArray<
+  UnionToTuple<
+    DeepKeyOf<Object>
+  >
+>;
 
 /** Attempts to identify the shared CaseName of the keys of a given object and return a CaseName. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
  *
@@ -30,27 +35,89 @@ export type DetectCaseNameFromKeys<Object extends { [key: string]: unknown }> =
  * ```
  */
 export function detectCaseNameFromKeys<
-  Object extends { [key: string]: unknown },
+  Object extends object,
 >(object: Object): DetectCaseNameFromKeys<Object> {
-  // deno-lint-ignore no-explicit-any
-  return detectCaseNameFromArray(Object.keys(object)) as any;
+  return detectCaseNameFromArray(
+    deepKeyOf(object),
+    // deno-lint-ignore no-explicit-any
+  ) as any;
 }
+
+export type ChangeKeysCase<
+  Object extends object,
+  FromCase extends CaseName,
+  ToCase extends CaseName,
+> = Object extends unknown[] ? BuildArray<Object, FromCase, ToCase>
+  : Object extends Record<PropertyKey, unknown> ? BuildObject<
+      Object,
+      FromCase,
+      ToCase
+    >
+  : Object;
+
+type BuildItem<Item, FromCase extends CaseName, ToCase extends CaseName> =
+  | ChangeKeysCase<Extract<Item, object>, FromCase, ToCase>
+  | Exclude<Item, object>;
+
+type BuildObject<
+  SourceObject extends Record<PropertyKey, unknown>,
+  FromCase extends CaseName,
+  ToCase extends CaseName,
+  Keys extends unknown[] = UnionToTuple<keyof SourceObject>,
+  Acc extends object = object,
+> = Keys extends [
+  infer Head extends PropertyKey,
+  ...infer Tail extends unknown[],
+] ? BuildObject<
+    SourceObject,
+    FromCase,
+    ToCase,
+    Tail,
+    & Acc
+    & {
+      [
+        Key in Head extends string ? ChangeStringCase<Head, FromCase, ToCase>
+          : Head
+      ]: BuildItem<
+        SourceObject[Head],
+        FromCase,
+        ToCase
+      >;
+    }
+  >
+  : Acc;
+
+type BuildArray<
+  SourceArray extends unknown[],
+  FromCase extends CaseName,
+  ToCase extends CaseName,
+> = number extends SourceArray["length"] ? (
+    BuildItem<SourceArray[number], FromCase, ToCase>
+  )[]
+  : BuildTuple<SourceArray, FromCase, ToCase>;
+
+type BuildTuple<
+  SourceTuple extends unknown[],
+  FromCase extends CaseName,
+  ToCase extends CaseName,
+  Acc extends unknown[] = [],
+> = SourceTuple extends [infer Head, ...infer Tail extends unknown[]]
+  ? BuildTuple<
+    Tail,
+    FromCase,
+    ToCase,
+    [
+      ...Acc,
+      BuildItem<Head, FromCase, ToCase>,
+    ]
+  >
+  : Acc;
 
 // overload
 /** Translates the keys within an object. The current case will be auto-detected if possible. */
-export type ChangeKeysCase<
-  Object extends { [key: string]: unknown },
-  FromCase extends CaseName,
-  ToCase extends CaseName,
-> = UnionToTuple<keyof Object> extends infer Keys extends string[]
-  ? BuildObjectFromKeyTuple<Object, ChangeKeyTupleCase<Keys, FromCase, ToCase>>
-  : Object;
-
-// overload
-/** Translates the keys within an object from one provided case to another */
 export function changeKeysCase<
-  const Object extends { [key: string]: unknown },
-  const ToCase extends CaseName,
+  Object extends object,
+  ToCase extends CaseName,
 >(
   object: Object,
   toCase: ToCase,
@@ -58,18 +125,21 @@ export function changeKeysCase<
   ? ChangeKeysCase<Object, FromCase, ToCase>
   : Object;
 
-// impl
+// overload
+/** Translates the keys within an object from one provided case to another */
 export function changeKeysCase<
-  const Object extends { [key: string]: unknown },
-  const FromCase extends CaseName,
-  const ToCase extends CaseName,
+  Object extends object,
+  FromCase extends CaseName,
+  ToCase extends CaseName,
 >(
   object: Object,
   fromCase: FromCase,
   toCase: ToCase,
 ): ChangeKeysCase<Object, FromCase, ToCase>;
+
+// impl
 export function changeKeysCase(
-  object: { [key: string]: unknown },
+  object: object,
   ...props: [CaseName, CaseName] | [CaseName]
 ) {
   const toCase = props.length === 2 ? props[1] : props[0];
@@ -81,42 +151,23 @@ export function changeKeysCase(
     return object;
   }
 
+  if (Array.isArray(object)) {
+    return object.map((item) =>
+      typeof item === "object" ? changeKeysCase(item, fromCase, toCase) : item
+    );
+  }
+
+  if (object === null) {
+    return object;
+  }
+
   return Object.keys(object).reduce((acc: Record<string, unknown>, key) => {
-    acc[changeStringCase(key, fromCase, toCase)] = object[key];
+    const item = object[key as keyof typeof object];
+
+    acc[changeStringCase(key, fromCase, toCase)] = typeof item === "object"
+      ? changeKeysCase(item, fromCase, toCase)
+      : item;
+
     return acc;
   }, {});
 }
-
-type ChangeKeyTupleCase<
-  Keys extends string[],
-  FromCase extends CaseName,
-  ToCase extends CaseName,
-  Acc extends { prevKey: Keys[number]; newKey: string }[] = [],
-> = Keys extends [infer Head extends string, ...infer Tail extends string[]]
-  ? ChangeKeyTupleCase<
-    Tail,
-    FromCase,
-    ToCase,
-    [
-      ...Acc,
-      { prevKey: Head; newKey: ChangeStringCase<Head, FromCase, ToCase> },
-    ]
-  >
-  : Acc;
-
-type BuildObjectFromKeyTuple<
-  SourceObject extends { [key: string]: unknown },
-  ChangedKeys extends { prevKey: keyof SourceObject; newKey: string }[],
-  Acc extends { [key: string]: unknown } = { [key: string]: unknown },
-> = ChangedKeys extends [
-  {
-    prevKey: infer FromKey extends keyof SourceObject;
-    newKey: infer ToKey extends string;
-  },
-  ...infer Tail extends { prevKey: keyof SourceObject; newKey: string }[],
-] ? BuildObjectFromKeyTuple<
-    SourceObject,
-    Tail,
-    Acc & { [Key in ToKey]: SourceObject[FromKey] }
-  >
-  : Acc;
