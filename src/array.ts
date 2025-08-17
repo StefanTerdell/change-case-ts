@@ -17,6 +17,13 @@ import {
 } from "./string.ts";
 import type { UnionToTuple } from "./utils.ts";
 
+/* Attempts to extract a common CaseName for the string literal types within a tuple or array type. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
+ *
+ * @example
+ * ```typescript
+ * const case: DetectCaseNameFromArray<[123, "foo-bar", "baz"]> = "kebab-case";
+ * ```
+*/
 export type DetectCaseNameFromArray<Array extends unknown[]> = number extends
   Array["length"]
   ? Array extends (infer Item)[] ? DetectCaseNameFromTuple<UnionToTuple<Item>>
@@ -48,6 +55,13 @@ type DetectCaseNameFromTuple<
   /* Head is not a string */ : DetectCaseNameFromTuple<Tail, Prev> // Continue with Prev
   /* Head does not exist (tuple empty) */ : Prev; // Exit out with Prev;
 
+/* Attempts to extract a common CaseName for the string literals within a tuple or array. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
+ *
+ * @example
+ * ```typescript
+ * detectCaseNameFromArray([123, "foo-bar", "baz"]) satisfies "kebab-case";
+ * ```
+*/
 export function detectCaseNameFromArray<const Array extends unknown[]>(
   array: Array,
 ): DetectCaseNameFromArray<Array> | undefined {

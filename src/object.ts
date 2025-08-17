@@ -16,7 +16,7 @@ import { type DeepKeyOf, deepKeyOf, type UnionToTuple } from "./utils.ts";
  *
  * @example
  * ```typescript
- * const case: DetectCaseNameFromKeys({ fooBar: 0, baz: 0 }) = "camelCase";
+ * const case: DetectCaseNameFromKeys<{ fooBar: 0, baz: 0 }> = "camelCase";
  * ```
  */
 export type DetectCaseNameFromKeys<
@@ -43,6 +43,7 @@ export function detectCaseNameFromKeys<
   ) as any;
 }
 
+/** Deeply changes the keys (property names) of records within an object type (including arrays and tuples) */
 export type ChangeKeysCase<
   Object extends object,
   FromCase extends CaseName,
