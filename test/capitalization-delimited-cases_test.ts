@@ -1,11 +1,11 @@
 import {
-  CamelCaseToWords,
+  type CamelCaseToWords,
   camelCaseToWords,
-  PascalCaseToWords,
+  type PascalCaseToWords,
   pascalCaseToWords,
-  WordsToCamelCase,
+  type WordsToCamelCase,
   wordsToCamelCase,
-  WordsToPascalCase,
+  type WordsToPascalCase,
   wordsToPascalCase,
 } from "../src/capitalization-delimited-cases.ts";
 

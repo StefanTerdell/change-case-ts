@@ -1,8 +1,8 @@
-import { CaseName } from "./cases.ts";
+import type { CaseName } from "./cases.ts";
 import {
-  StringToWords,
+  type StringToWords,
   stringToWords,
-  WordsToString,
+  type WordsToString,
   wordsToString,
 } from "./words.ts";
 

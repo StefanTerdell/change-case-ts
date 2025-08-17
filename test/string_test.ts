@@ -1,4 +1,4 @@
-import { ChangeStringCase } from "../src/string.ts";
+import type { ChangeStringCase } from "../src/string.ts";
 
 "HejHej" satisfies ChangeStringCase<"hejHej", "camelCase", "PascalCase">;
 

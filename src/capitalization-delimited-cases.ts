@@ -1,8 +1,8 @@
-import {
+import type {
   StringToLowerCase,
   UpperToLowerCaseCharMap,
 } from "./non-delimited-cases.ts";
-import { CharToUpperCase } from "./non-delimited-cases.ts";
+import type { CharToUpperCase } from "./non-delimited-cases.ts";
 
 export type CamelCaseName = "camelCase";
 

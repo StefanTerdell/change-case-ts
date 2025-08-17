@@ -1,9 +1,9 @@
-import {
+import type {
   CamelCaseName,
   PascalCaseName,
 } from "../src/capitalization-delimited-cases.ts";
-import { ChangeObjectCase } from "../src/object.ts";
-import {
+import type { ChangeObjectCase } from "../src/object.ts";
+import type {
   SnakeCaseName,
   UpperKebabCaseName,
 } from "../src/symbol-delimited-cases.ts";

@@ -1,14 +1,14 @@
 import {
-  CapitalizationDelimitedCaseName,
+  type CapitalizationDelimitedCaseName,
   isCapitalizationDelimitedCaseName,
 } from "./capitalization-delimited-cases.ts";
 import {
   isNonDelimitedCaseName,
-  NonDelimitedCaseName,
+  type NonDelimitedCaseName,
 } from "./non-delimited-cases.ts";
 import {
   isSymbolDelimitedCaseName,
-  SymbolDelimitedCaseName,
+  type SymbolDelimitedCaseName,
 } from "./symbol-delimited-cases.ts";
 
 export type CaseName =

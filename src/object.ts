@@ -1,6 +1,6 @@
-import { CaseName } from "./cases.ts";
-import { ChangeStringCase, changeStringCase } from "./string.ts";
-import { UnionToTuple } from "./utils.ts";
+import type { CaseName } from "./cases.ts";
+import { type ChangeStringCase, changeStringCase } from "./string.ts";
+import type { UnionToTuple } from "./utils.ts";
 
 export type ChangeObjectCase<
   Object extends { [key: string]: unknown },
