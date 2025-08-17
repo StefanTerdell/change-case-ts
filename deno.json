@@ -1,4 +1,7 @@
 {
+  "name": "@stefan/change-case-ts",
+  "exports": "./src/lib.ts",
+  "version": "0.0.0",
   "tasks": {
     "dev": "deno run --watch src/lib.ts"
   },
