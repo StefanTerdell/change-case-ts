@@ -1,6 +1,6 @@
 import {
-  UpperToLowerCaseCharMap,
   StringToLowerCase,
+  UpperToLowerCaseCharMap,
 } from "./non-delimited-cases.ts";
 import { CharToUpperCase } from "./non-delimited-cases.ts";
 
@@ -31,14 +31,13 @@ type CapitalizationDelimitedCaseToWords<
 > = String extends `${infer Head extends string}${infer Tail extends string}`
   ? Head extends keyof UpperToLowerCaseCharMap
     ? CapitalizationDelimitedCaseToWords<
-        Tail,
-        Acc extends "" ? Words : [...Words, StringToLowerCase<Acc>],
-        Head
-      >
-    : CapitalizationDelimitedCaseToWords<Tail, Words, `${Acc}${Head}`>
-  : Acc extends ""
-    ? Words
-    : [...Words, StringToLowerCase<Acc>];
+      Tail,
+      Acc extends "" ? Words : [...Words, StringToLowerCase<Acc>],
+      Head
+    >
+  : CapitalizationDelimitedCaseToWords<Tail, Words, `${Acc}${Head}`>
+  : Acc extends "" ? Words
+  : [...Words, StringToLowerCase<Acc>];
 
 function capitalizationDelimitedStringToWords<String extends string>(
   string: String,
@@ -87,13 +86,13 @@ export type WordsToCamelCase<
   Acc extends string = "",
 > = Words extends [infer Head extends string, ...infer Tail extends string[]]
   ? WordsToCamelCase<
-      Tail,
-      Acc extends ""
-        ? Head
-        : `${Acc}${Head extends `${infer WordHead extends string}${infer WordTail extends string}`
-            ? `${CharToUpperCase<WordHead>}${StringToLowerCase<WordTail>}`
-            : Head}`
-    >
+    Tail,
+    Acc extends "" ? Head
+      : `${Acc}${Head extends
+        `${infer WordHead extends string}${infer WordTail extends string}`
+        ? `${CharToUpperCase<WordHead>}${StringToLowerCase<WordTail>}`
+        : Head}`
+  >
   : Acc;
 
 export function wordsToCamelCase<const Words extends string[]>(
@@ -111,11 +110,12 @@ export type WordsToPascalCase<
   Acc extends string = "",
 > = Words extends [infer Head extends string, ...infer Tail extends string[]]
   ? WordsToCamelCase<
-      Tail,
-      `${Acc}${Head extends `${infer WordHead extends string}${infer WordTail extends string}`
-        ? `${CharToUpperCase<WordHead>}${StringToLowerCase<WordTail>}`
-        : Head}`
-    >
+    Tail,
+    `${Acc}${Head extends
+      `${infer WordHead extends string}${infer WordTail extends string}`
+      ? `${CharToUpperCase<WordHead>}${StringToLowerCase<WordTail>}`
+      : Head}`
+  >
   : Acc;
 
 export function wordsToPascalCase<const Words extends string[]>(
@@ -124,10 +124,16 @@ export function wordsToPascalCase<const Words extends string[]>(
   return (
     words.length
       ? words.reduce(
-          (acc, word) =>
-            `${acc}${((word) => (word.length ? `${word[0].toLocaleUpperCase()}${word.slice(1).toLocaleLowerCase()}` : ""))(word)}`,
-          "",
-        )
+        (acc, word) =>
+          `${acc}${
+            ((word) => (word.length
+              ? `${word[0].toLocaleUpperCase()}${
+                word.slice(1).toLocaleLowerCase()
+              }`
+              : ""))(word)
+          }`,
+        "",
+      )
       : ""
   ) as WordsToPascalCase<Words>;
 }

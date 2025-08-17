@@ -65,17 +65,15 @@ type SymbolDelimitedCaseToWords<
   WordsAcc extends string[] = [],
   Acc extends string = "",
 > = String extends `${infer Head extends string}${infer Tail extends string}`
-  ? Head extends Delimiter
-    ? SymbolDelimitedCaseToWords<
-        Delimiter,
-        Tail,
-        Acc extends "" ? WordsAcc : [...WordsAcc, StringToLowerCase<Acc>],
-        ""
-      >
-    : SymbolDelimitedCaseToWords<Delimiter, Tail, WordsAcc, `${Acc}${Head}`>
-  : Acc extends ""
-    ? WordsAcc
-    : [...WordsAcc, StringToLowerCase<Acc>];
+  ? Head extends Delimiter ? SymbolDelimitedCaseToWords<
+      Delimiter,
+      Tail,
+      Acc extends "" ? WordsAcc : [...WordsAcc, StringToLowerCase<Acc>],
+      ""
+    >
+  : SymbolDelimitedCaseToWords<Delimiter, Tail, WordsAcc, `${Acc}${Head}`>
+  : Acc extends "" ? WordsAcc
+  : [...WordsAcc, StringToLowerCase<Acc>];
 
 function symbolDelimitedCaseToWords<
   Delimiter extends string,
@@ -125,8 +123,9 @@ export function kebabCaseToWords<const String extends string>(
   return symbolDelimitedCaseToWords("-", string);
 }
 
-export type UpperSnakeCaseToWords<String extends string> =
-  SnakeCaseToWords<String>;
+export type UpperSnakeCaseToWords<String extends string> = SnakeCaseToWords<
+  String
+>;
 
 export function upperSnakeCaseToWords<const String extends string>(
   string: String,
@@ -134,8 +133,9 @@ export function upperSnakeCaseToWords<const String extends string>(
   return symbolDelimitedCaseToWords("_", string);
 }
 
-export type UpperKebabCaseToWords<String extends string> =
-  KebabCaseToWords<String>;
+export type UpperKebabCaseToWords<String extends string> = KebabCaseToWords<
+  String
+>;
 
 export function upperKebabCaseToWords<const String extends string>(
   string: String,
@@ -149,10 +149,10 @@ type WordsToSymbolDelimitedCase<
   Acc extends string = "",
 > = Words extends [infer Head extends string, ...infer Tail extends string[]]
   ? WordsToSymbolDelimitedCase<
-      Delimiter,
-      Tail,
-      Acc extends "" ? Head : `${Acc}${Delimiter}${Head}`
-    >
+    Delimiter,
+    Tail,
+    Acc extends "" ? Head : `${Acc}${Delimiter}${Head}`
+  >
   : Acc;
 
 function wordsToSymbolDelimitedCase<

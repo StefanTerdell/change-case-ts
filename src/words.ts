@@ -1,78 +1,70 @@
 import { CaseName } from "./cases.ts";
 import {
   CamelCaseName,
-  camelCaseToWords,
   CamelCaseToWords,
+  camelCaseToWords,
   isCamelCaseName,
   isPascalCaseName,
   PascalCaseName,
-  pascalCaseToWords,
   PascalCaseToWords,
-  wordsToCamelCase,
+  pascalCaseToWords,
   WordsToCamelCase,
-  wordsToPascalCase,
+  wordsToCamelCase,
   WordsToPascalCase,
+  wordsToPascalCase,
 } from "./capitalization-delimited-cases.ts";
 import {
   isLowerCaseName,
   isUpperCaseName,
   LowerCaseName,
-  lowerCaseToWords,
   LowerCaseToWords,
+  lowerCaseToWords,
   UpperCaseName,
-  upperCaseToWords,
   UpperCaseToWords,
-  wordsToLowerCase,
+  upperCaseToWords,
   WordsToLowerCase,
-  wordsToUpperCase,
+  wordsToLowerCase,
   WordsToUpperCase,
+  wordsToUpperCase,
 } from "./non-delimited-cases.ts";
 import {
   isKebabCaseName,
   isSnakeCaseName,
   isUpperKebabCaseName,
   KebabCaseName,
-  kebabCaseToWords,
   KebabCaseToWords,
+  kebabCaseToWords,
   SnakeCaseName,
-  snakeCaseToWords,
   SnakeCaseToWords,
+  snakeCaseToWords,
   UpperKebabCaseName,
-  upperKebabCaseToWords,
   UpperKebabCaseToWords,
+  upperKebabCaseToWords,
   UpperSnakeCaseName,
-  upperSnakeCaseToWords,
   UpperSnakeCaseToWords,
-  wordsToKebabCase,
+  upperSnakeCaseToWords,
   WordsToKebabCase,
-  wordsToSnakeCase,
+  wordsToKebabCase,
   WordsToSnakeCase,
-  wordsToUpperKebabCase,
+  wordsToSnakeCase,
   WordsToUpperKebabCase,
-  wordsToUpperSnakeCase,
+  wordsToUpperKebabCase,
   WordsToUpperSnakeCase,
+  wordsToUpperSnakeCase,
 } from "./symbol-delimited-cases.ts";
 
 export type WordsToString<
   Case extends CaseName,
   Words extends string[],
-> = Case extends LowerCaseName
-  ? WordsToLowerCase<Words>
-  : Case extends UpperCaseName
-    ? WordsToUpperCase<Words>
-    : Case extends CamelCaseName
-      ? WordsToCamelCase<Words>
-      : Case extends PascalCaseName
-        ? WordsToPascalCase<Words>
-        : Case extends SnakeCaseName
-          ? WordsToSnakeCase<Words>
-          : Case extends UpperSnakeCaseName
-            ? WordsToUpperSnakeCase<Words>
-            : Case extends KebabCaseName
-              ? WordsToKebabCase<Words>
-              : Case extends UpperKebabCaseName
-                ? WordsToUpperKebabCase<Words>
-                : WordsToStringAcc<Words>;
+> = Case extends LowerCaseName ? WordsToLowerCase<Words>
+  : Case extends UpperCaseName ? WordsToUpperCase<Words>
+  : Case extends CamelCaseName ? WordsToCamelCase<Words>
+  : Case extends PascalCaseName ? WordsToPascalCase<Words>
+  : Case extends SnakeCaseName ? WordsToSnakeCase<Words>
+  : Case extends UpperSnakeCaseName ? WordsToUpperSnakeCase<Words>
+  : Case extends KebabCaseName ? WordsToKebabCase<Words>
+  : Case extends UpperKebabCaseName ? WordsToUpperKebabCase<Words>
+  : WordsToStringAcc<Words>;
 
 type WordsToStringAcc<
   Words extends string[],
@@ -89,43 +81,35 @@ export function wordsToString<Case extends CaseName, Words extends string[]>(
     isUpperCaseName(caseName)
       ? wordsToUpperCase(words)
       : isLowerCaseName(caseName)
-        ? wordsToLowerCase(words)
-        : isSnakeCaseName(caseName)
-          ? wordsToSnakeCase(words)
-          : isKebabCaseName(caseName)
-            ? wordsToKebabCase(words)
-            : isUpperCaseName(caseName)
-              ? wordsToUpperSnakeCase(words)
-              : isUpperKebabCaseName(caseName)
-                ? wordsToUpperKebabCase(words)
-                : isCamelCaseName(caseName)
-                  ? wordsToCamelCase(words)
-                  : isPascalCaseName(caseName)
-                    ? wordsToPascalCase(words)
-                    : words.join("")
+      ? wordsToLowerCase(words)
+      : isSnakeCaseName(caseName)
+      ? wordsToSnakeCase(words)
+      : isKebabCaseName(caseName)
+      ? wordsToKebabCase(words)
+      : isUpperCaseName(caseName)
+      ? wordsToUpperSnakeCase(words)
+      : isUpperKebabCaseName(caseName)
+      ? wordsToUpperKebabCase(words)
+      : isCamelCaseName(caseName)
+      ? wordsToCamelCase(words)
+      : isPascalCaseName(caseName)
+      ? wordsToPascalCase(words)
+      : words.join("")
   ) as WordsToString<Case, Words>;
 }
 
 export type StringToWords<
   Case extends CaseName,
   String extends string,
-> = Case extends LowerCaseName
-  ? LowerCaseToWords<String>
-  : Case extends UpperCaseName
-    ? UpperCaseToWords<String>
-    : Case extends CamelCaseName
-      ? CamelCaseToWords<String>
-      : Case extends PascalCaseName
-        ? PascalCaseToWords<String>
-        : Case extends SnakeCaseName
-          ? SnakeCaseToWords<String>
-          : Case extends UpperSnakeCaseName
-            ? UpperSnakeCaseToWords<String>
-            : Case extends KebabCaseName
-              ? KebabCaseToWords<String>
-              : Case extends UpperKebabCaseName
-                ? UpperKebabCaseToWords<String>
-                : [String];
+> = Case extends LowerCaseName ? LowerCaseToWords<String>
+  : Case extends UpperCaseName ? UpperCaseToWords<String>
+  : Case extends CamelCaseName ? CamelCaseToWords<String>
+  : Case extends PascalCaseName ? PascalCaseToWords<String>
+  : Case extends SnakeCaseName ? SnakeCaseToWords<String>
+  : Case extends UpperSnakeCaseName ? UpperSnakeCaseToWords<String>
+  : Case extends KebabCaseName ? KebabCaseToWords<String>
+  : Case extends UpperKebabCaseName ? UpperKebabCaseToWords<String>
+  : [String];
 
 export function stringToWords<Case extends CaseName, String extends string>(
   caseName: Case,
@@ -135,19 +119,19 @@ export function stringToWords<Case extends CaseName, String extends string>(
     isUpperCaseName(caseName)
       ? upperCaseToWords(string)
       : isLowerCaseName(caseName)
-        ? lowerCaseToWords(string)
-        : isSnakeCaseName(caseName)
-          ? snakeCaseToWords(string)
-          : isKebabCaseName(caseName)
-            ? kebabCaseToWords(string)
-            : isUpperCaseName(caseName)
-              ? upperSnakeCaseToWords(string)
-              : isUpperKebabCaseName(caseName)
-                ? upperKebabCaseToWords(string)
-                : isCamelCaseName(caseName)
-                  ? camelCaseToWords(string)
-                  : isPascalCaseName(caseName)
-                    ? pascalCaseToWords(string)
-                    : [string]
+      ? lowerCaseToWords(string)
+      : isSnakeCaseName(caseName)
+      ? snakeCaseToWords(string)
+      : isKebabCaseName(caseName)
+      ? kebabCaseToWords(string)
+      : isUpperCaseName(caseName)
+      ? upperSnakeCaseToWords(string)
+      : isUpperKebabCaseName(caseName)
+      ? upperKebabCaseToWords(string)
+      : isCamelCaseName(caseName)
+      ? camelCaseToWords(string)
+      : isPascalCaseName(caseName)
+      ? pascalCaseToWords(string)
+      : [string]
   ) as StringToWords<Case, String>;
 }

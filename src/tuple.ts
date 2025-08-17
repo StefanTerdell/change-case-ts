@@ -1,5 +1,5 @@
 import { CaseName } from "./cases.ts";
-import { changeStringCase, ChangeStringCase } from "./string.ts";
+import { ChangeStringCase, changeStringCase } from "./string.ts";
 
 export type ChangeTupleCase<
   Tuple extends unknown[],
@@ -13,14 +13,13 @@ type ChangeTupleCaseAcc<
   ToCase extends CaseName,
   Acc extends unknown[] = [],
 > = Tuple extends [infer Head, ...infer Tail extends unknown[]]
-  ? Head extends string
-    ? ChangeTupleCaseAcc<
-        Tail,
-        FromCase,
-        ToCase,
-        [...Acc, ChangeStringCase<Head, FromCase, ToCase>]
-      >
-    : ChangeTupleCaseAcc<Tail, FromCase, ToCase, [...Acc, Head]>
+  ? Head extends string ? ChangeTupleCaseAcc<
+      Tail,
+      FromCase,
+      ToCase,
+      [...Acc, ChangeStringCase<Head, FromCase, ToCase>]
+    >
+  : ChangeTupleCaseAcc<Tail, FromCase, ToCase, [...Acc, Head]>
   : Acc;
 
 export function changeTupleCase<
@@ -33,6 +32,6 @@ export function changeTupleCase<
   toCase: ToCase,
 ): ChangeTupleCase<Tuple, FromCase, ToCase> {
   return tuple.map((item) =>
-    typeof item === "string" ? changeStringCase(item, fromCase, toCase) : item,
+    typeof item === "string" ? changeStringCase(item, fromCase, toCase) : item
   ) as ChangeTupleCase<Tuple, FromCase, ToCase>;
 }

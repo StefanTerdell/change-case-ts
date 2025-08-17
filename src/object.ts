@@ -1,15 +1,14 @@
 import { CaseName } from "./cases.ts";
-import { changeStringCase, ChangeStringCase } from "./string.ts";
+import { ChangeStringCase, changeStringCase } from "./string.ts";
 import { UnionToTuple } from "./utils.ts";
 
 export type ChangeObjectCase<
   Object extends { [key: string]: unknown },
   FromCase extends CaseName,
   ToCase extends CaseName,
-> =
-  UnionToTuple<keyof Object> extends infer Keys extends string[]
-    ? BuildObjectChangedKeys<Object, ChangeKeysCase<Keys, FromCase, ToCase>>
-    : Object;
+> = UnionToTuple<keyof Object> extends infer Keys extends string[]
+  ? BuildObjectChangedKeys<Object, ChangeKeysCase<Keys, FromCase, ToCase>>
+  : Object;
 
 export function changeObjectCase<
   Object extends { [key: string]: unknown },
@@ -33,14 +32,14 @@ type ChangeKeysCase<
   Acc extends { prevKey: Keys[number]; newKey: string }[] = [],
 > = Keys extends [infer Head extends string, ...infer Tail extends string[]]
   ? ChangeKeysCase<
-      Tail,
-      FromCase,
-      ToCase,
-      [
-        ...Acc,
-        { prevKey: Head; newKey: ChangeStringCase<Head, FromCase, ToCase> },
-      ]
-    >
+    Tail,
+    FromCase,
+    ToCase,
+    [
+      ...Acc,
+      { prevKey: Head; newKey: ChangeStringCase<Head, FromCase, ToCase> },
+    ]
+  >
   : Acc;
 
 type BuildObjectChangedKeys<
@@ -53,10 +52,9 @@ type BuildObjectChangedKeys<
     newKey: infer ToKey extends string;
   },
   ...infer Tail extends { prevKey: keyof SourceObject; newKey: string }[],
-]
-  ? BuildObjectChangedKeys<
-      SourceObject,
-      Tail,
-      Acc & { [Key in ToKey]: SourceObject[FromKey] }
-    >
+] ? BuildObjectChangedKeys<
+    SourceObject,
+    Tail,
+    Acc & { [Key in ToKey]: SourceObject[FromKey] }
+  >
   : Acc;

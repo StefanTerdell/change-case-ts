@@ -1,21 +1,23 @@
 import {
   CamelCaseToWords,
-  PascalCaseToWords,
-  wordsToCamelCase,
-  wordsToPascalCase,
-  WordsToCamelCase,
-  WordsToPascalCase,
   camelCaseToWords,
+  PascalCaseToWords,
   pascalCaseToWords,
+  WordsToCamelCase,
+  wordsToCamelCase,
+  WordsToPascalCase,
+  wordsToPascalCase,
 } from "../src/capitalization-delimited-cases.ts";
 
 import { assertEquals } from "@std/assert";
 
-["hello", "world123!"] satisfies PascalCaseToWords<"HelloWorld123!"> &
-  CamelCaseToWords<"helloWorld123!">;
+["hello", "world123!"] satisfies
+  & PascalCaseToWords<"HelloWorld123!">
+  & CamelCaseToWords<"helloWorld123!">;
 
-["din", "mamma", "en", "pappa"] satisfies PascalCaseToWords<"DinMammaEnPappa"> &
-  CamelCaseToWords<"dinMammaEnPappa">;
+["din", "mamma", "en", "pappa"] satisfies
+  & PascalCaseToWords<"DinMammaEnPappa">
+  & CamelCaseToWords<"dinMammaEnPappa">;
 
 "dinMammaEnPappa" satisfies WordsToCamelCase<["din", "MAMMA", "en", "pApPa"]>;
 "DinMammaEnPappa" satisfies WordsToPascalCase<["din", "MAMMA", "en", "pApPa"]>;

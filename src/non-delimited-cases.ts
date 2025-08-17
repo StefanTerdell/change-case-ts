@@ -20,10 +20,9 @@ export function isNonDelimitedCaseName(
 
 // Lower case
 
-export type CharToLowerCase<Char extends string> =
-  Char extends keyof UpperToLowerCaseCharMap
-    ? UpperToLowerCaseCharMap[Char]
-    : Char;
+export type CharToLowerCase<Char extends string> = Char extends
+  keyof UpperToLowerCaseCharMap ? UpperToLowerCaseCharMap[Char]
+  : Char;
 
 export function charToLowerCase<const Char extends string>(
   char: Char,
@@ -67,9 +66,9 @@ export type WordsToLowerCaseWords<
 export function wordsToLowerCaseWords<const Words extends string[]>(
   words: Words,
 ): WordsToLowerCaseWords<Words> {
-  return words.map((word) =>
-    stringToLowerCase(word),
-  ) as WordsToLowerCaseWords<Words>;
+  return words.map((word) => stringToLowerCase(word)) as WordsToLowerCaseWords<
+    Words
+  >;
 }
 
 export type LowerCaseToWords<String extends string> = [
@@ -99,10 +98,9 @@ export function wordsToLowerCase<const Words extends string[]>(
 
 // Upper case
 
-export type CharToUpperCase<Char extends string> =
-  Char extends keyof LowerToUpperCaseCharMap
-    ? LowerToUpperCaseCharMap[Char]
-    : Char;
+export type CharToUpperCase<Char extends string> = Char extends
+  keyof LowerToUpperCaseCharMap ? LowerToUpperCaseCharMap[Char]
+  : Char;
 
 export function charToUpperCase<const Char extends string>(
   char: Char,
@@ -144,9 +142,9 @@ export type WordsToUpperCaseWords<
 export function wordsToUpperCaseWords<const Words extends string[]>(
   words: Words,
 ): WordsToUpperCaseWords<Words> {
-  return words.map((word) =>
-    stringToUpperCase(word),
-  ) as WordsToUpperCaseWords<Words>;
+  return words.map((word) => stringToUpperCase(word)) as WordsToUpperCaseWords<
+    Words
+  >;
 }
 
 export type UpperCaseToWords<String extends string> = [String];

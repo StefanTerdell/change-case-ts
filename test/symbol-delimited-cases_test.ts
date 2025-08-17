@@ -1,21 +1,21 @@
 import { assertEquals } from "@std/assert";
 import {
-  kebabCaseToWords,
   KebabCaseToWords,
+  kebabCaseToWords,
   SnakeCaseToWords,
   snakeCaseToWords,
-  upperKebabCaseToWords,
   UpperKebabCaseToWords,
-  upperSnakeCaseToWords,
+  upperKebabCaseToWords,
   UpperSnakeCaseToWords,
-  wordsToKebabCase,
+  upperSnakeCaseToWords,
   WordsToKebabCase,
-  wordsToSnakeCase,
+  wordsToKebabCase,
   WordsToSnakeCase,
-  wordsToUpperKebabCase,
+  wordsToSnakeCase,
   WordsToUpperKebabCase,
-  wordsToUpperSnakeCase,
+  wordsToUpperKebabCase,
   WordsToUpperSnakeCase,
+  wordsToUpperSnakeCase,
 } from "../src/symbol-delimited-cases.ts";
 
 ["hello", "world", "123"] satisfies KebabCaseToWords<"hello-world-123">;
