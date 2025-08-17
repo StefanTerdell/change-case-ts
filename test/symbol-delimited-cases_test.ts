@@ -18,6 +18,11 @@ import {
   WordsToUpperSnakeCase,
 } from "../src/symbol-delimited-cases.ts";
 
+["hello", "world", "123"] satisfies KebabCaseToWords<"hello-world-123">;
+"hello-world-123" satisfies WordsToKebabCase<["hello", "world", "123"]>;
+["hello", "world123"] satisfies SnakeCaseToWords<"hello_world123">;
+"hello_world123" satisfies WordsToSnakeCase<["hello", "world123"]>;
+
 "din-mamma-en-pappa" satisfies WordsToKebabCase<
   ["din", "MAMMA", "en", "pApPa"]
 >;

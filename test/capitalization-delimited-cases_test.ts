@@ -11,6 +11,9 @@ import {
 
 import { assertEquals } from "@std/assert";
 
+["hello", "world123!"] satisfies PascalCaseToWords<"HelloWorld123!"> &
+  CamelCaseToWords<"helloWorld123!">;
+
 ["din", "mamma", "en", "pappa"] satisfies PascalCaseToWords<"DinMammaEnPappa"> &
   CamelCaseToWords<"dinMammaEnPappa">;
 

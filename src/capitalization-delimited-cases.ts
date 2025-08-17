@@ -1,4 +1,7 @@
-import { StringToLowerCase } from "./non-delimited-cases.ts";
+import {
+  UpperToLowerCaseCharMap,
+  StringToLowerCase,
+} from "./non-delimited-cases.ts";
 import { CharToUpperCase } from "./non-delimited-cases.ts";
 
 export type CamelCaseName = "camelCase";
@@ -26,7 +29,7 @@ type CapitalizationDelimitedCaseToWords<
   Words extends string[] = [],
   Acc extends string = "",
 > = String extends `${infer Head extends string}${infer Tail extends string}`
-  ? Head extends CharToUpperCase<Head>
+  ? Head extends keyof UpperToLowerCaseCharMap
     ? CapitalizationDelimitedCaseToWords<
         Tail,
         Acc extends "" ? Words : [...Words, StringToLowerCase<Acc>],

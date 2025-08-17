@@ -21,14 +21,16 @@ export function isNonDelimitedCaseName(
 // Lower case
 
 export type CharToLowerCase<Char extends string> =
-  Char extends keyof LowerCaseCharMap ? LowerCaseCharMap[Char] : Char;
+  Char extends keyof UpperToLowerCaseCharMap
+    ? UpperToLowerCaseCharMap[Char]
+    : Char;
 
 export function charToLowerCase<const Char extends string>(
   char: Char,
 ): CharToLowerCase<Char> {
   return (
-    char in lowerCaseCharMap
-      ? lowerCaseCharMap[char as keyof LowerCaseCharMap]
+    char in upperToLowerCaseCharMap
+      ? upperToLowerCaseCharMap[char as keyof UpperToLowerCaseCharMap]
       : char
   ) as CharToLowerCase<Char>;
 }
@@ -98,14 +100,16 @@ export function wordsToLowerCase<const Words extends string[]>(
 // Upper case
 
 export type CharToUpperCase<Char extends string> =
-  Char extends keyof UpperCaseCharMap ? UpperCaseCharMap[Char] : Char;
+  Char extends keyof LowerToUpperCaseCharMap
+    ? LowerToUpperCaseCharMap[Char]
+    : Char;
 
 export function charToUpperCase<const Char extends string>(
   char: Char,
 ): CharToUpperCase<Char> {
   return (
-    char in upperCaseCharMap
-      ? upperCaseCharMap[char as keyof UpperCaseCharMap]
+    char in lowerToUpperCaseCharMap
+      ? lowerToUpperCaseCharMap[char as keyof LowerToUpperCaseCharMap]
       : char
   ) as CharToUpperCase<Char>;
 }
@@ -169,9 +173,9 @@ export function wordsToUpperCase<const Words extends string[]>(
 }
 
 // Maps
-export type LowerCaseCharMap = typeof lowerCaseCharMap;
+export type UpperToLowerCaseCharMap = typeof upperToLowerCaseCharMap;
 
-export const lowerCaseCharMap = {
+export const upperToLowerCaseCharMap = {
   A: "a" as const,
   B: "b" as const,
   C: "c" as const,
@@ -245,13 +249,12 @@ export const lowerCaseCharMap = {
   Ť: "ť" as const,
   Ź: "ź" as const,
   Ż: "ż" as const,
-
   // Add additional entries as needed
 };
 
-export type UpperCaseCharMap = typeof upperCaseCharMap;
+export type LowerToUpperCaseCharMap = typeof lowerToUpperCaseCharMap;
 
-export const upperCaseCharMap = {
+export const lowerToUpperCaseCharMap = {
   a: "A" as const,
   b: "B" as const,
   c: "C" as const,
@@ -325,6 +328,5 @@ export const upperCaseCharMap = {
   ť: "Ť" as const,
   ź: "Ź" as const,
   ż: "Ż" as const,
-
   // Add any additional characters you may require
 };
