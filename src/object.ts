@@ -1,21 +1,43 @@
+/**
+ * This module contains functions and types to change the cases of object keys
+ *
+ * @module
+ */
+
 import type { CaseName } from "./cases.ts";
 import { type ChangeStringCase, changeStringCase } from "./string.ts";
 import {
-  type DetectCaseNameFromTuple,
-  detectCaseNameFromTuple,
-} from "./tuple.ts";
+  type DetectCaseNameFromArray,
+  detectCaseNameFromArray,
+} from "./array.ts";
 import type { UnionToTuple } from "./utils.ts";
 
+/** Attempts to identify the shared CaseName of the keys of an object type and return a CaseName. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
+ *
+ * @example
+ * ```typescript
+ * const case: DetectCaseNameFromKeys({ fooBar: 0, baz: 0 }) = "camelCase";
+ * ```
+ */
 export type DetectCaseNameFromKeys<Object extends { [key: string]: unknown }> =
-  DetectCaseNameFromTuple<UnionToTuple<keyof Object>>;
+  DetectCaseNameFromArray<UnionToTuple<keyof Object>>;
 
+/** Attempts to identify the shared CaseName of the keys of a given object and return a CaseName. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
+ *
+ * @example
+ * ```typescript
+ * detectCaseNameFromKeys({ fooBar: 0, baz: 0 }) satisfies "camelCase";
+ * ```
+ */
 export function detectCaseNameFromKeys<
   Object extends { [key: string]: unknown },
 >(object: Object): DetectCaseNameFromKeys<Object> {
   // deno-lint-ignore no-explicit-any
-  return detectCaseNameFromTuple(Object.keys(object)) as any;
+  return detectCaseNameFromArray(Object.keys(object)) as any;
 }
 
+// overload
+/** Translates the keys within an object. The current case will be auto-detected if possible. */
 export type ChangeKeysCase<
   Object extends { [key: string]: unknown },
   FromCase extends CaseName,
@@ -24,6 +46,8 @@ export type ChangeKeysCase<
   ? BuildObjectFromKeyTuple<Object, ChangeKeyTupleCase<Keys, FromCase, ToCase>>
   : Object;
 
+// overload
+/** Translates the keys within an object from one provided case to another */
 export function changeKeysCase<
   const Object extends { [key: string]: unknown },
   const ToCase extends CaseName,
@@ -33,6 +57,8 @@ export function changeKeysCase<
 ): DetectCaseNameFromKeys<Object> extends infer FromCase extends CaseName
   ? ChangeKeysCase<Object, FromCase, ToCase>
   : Object;
+
+// impl
 export function changeKeysCase<
   const Object extends { [key: string]: unknown },
   const FromCase extends CaseName,

@@ -1,11 +1,13 @@
+import {
+  type ChangeArrayCase,
+  changeArrayCase,
+  type DetectCaseNameFromArray,
+  detectCaseNameFromArray,
+} from "./array.ts";
 import type { CaseName } from "./cases.ts";
-import { changeTupleCase } from "./index.ts";
 import {
   type ChangeKeysCase,
   changeKeysCase,
-  type ChangeTupleCase,
-} from "./lib.ts";
-import {
   type DetectCaseNameFromKeys,
   detectCaseNameFromKeys,
 } from "./object.ts";
@@ -15,29 +17,16 @@ import {
   type DetectCaseNameFromString,
   detectCaseNameFromString,
 } from "./string.ts";
-import {
-  type DetectCaseNameFromTuple,
-  detectCaseNameFromTuple,
-} from "./tuple.ts";
 import type { Writeable } from "./utils.ts";
 
-export type ChangeCase<
-  Value,
-  FromCase extends CaseName,
-  ToCase extends CaseName,
-> = Value extends string ? ChangeStringCase<Value, FromCase, ToCase>
-  : Value extends readonly unknown[]
-    ? ChangeTupleCase<Writeable<Value>, FromCase, ToCase>
-  : Value extends { [key: string]: unknown }
-    ? ChangeKeysCase<Value, FromCase, ToCase>
-  : Value;
-
+/** Attempts to identify the common CaseName of a provided type. */
 export type DetectCaseName<Value> = Value extends string
   ? DetectCaseNameFromString<Value>
-  : Value extends readonly unknown[] ? DetectCaseNameFromTuple<Writeable<Value>>
+  : Value extends readonly unknown[] ? DetectCaseNameFromArray<Writeable<Value>>
   : Value extends { [key: string]: unknown } ? DetectCaseNameFromKeys<Value>
   : undefined;
 
+/** Attempts to identify the common CaseName of a provided value. */
 export function detectCaseName<const Value>(
   value: Value,
 ): DetectCaseName<Value>;
@@ -53,7 +42,7 @@ export function detectCaseName(
   }
 
   if (Array.isArray(value)) {
-    return detectCaseNameFromTuple(value);
+    return detectCaseNameFromArray(value);
   }
 
   if (typeof value === "object" && value !== null) {
@@ -64,12 +53,29 @@ export function detectCaseName(
   return undefined;
 }
 
+// overload
+/** Changes the case of a provided type. */
+export type ChangeCase<
+  Value,
+  FromCase extends CaseName,
+  ToCase extends CaseName,
+> = Value extends string ? ChangeStringCase<Value, FromCase, ToCase>
+  : Value extends readonly unknown[]
+    ? ChangeArrayCase<Writeable<Value>, FromCase, ToCase>
+  : Value extends { [key: string]: unknown }
+    ? ChangeKeysCase<Value, FromCase, ToCase>
+  : Value;
+
+// overload
+/** Changes the case of a provided value. */
 export function changeCase<const Value, const ToCase extends CaseName>(
   value: Value,
   toCase: ToCase,
 ): DetectCaseName<Value> extends infer FromCase extends CaseName
   ? ChangeCase<Value, FromCase, ToCase>
   : Value;
+
+// impl
 export function changeCase<
   const Value,
   const FromCase extends CaseName,
@@ -99,7 +105,7 @@ export function changeCase(
   }
 
   if (Array.isArray(value)) {
-    return changeTupleCase(value, fromCase, toCase);
+    return changeArrayCase(value, fromCase, toCase);
   }
 
   if (typeof value === "object") {

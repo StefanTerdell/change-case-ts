@@ -1,3 +1,8 @@
+/**
+ * Contains functions and types that translate string literals between cases and identifies their current case
+ * @module
+ */
+
 import {
   CAMEL_CASE,
   type CamelCaseName,
@@ -36,6 +41,7 @@ import {
   wordsToString,
 } from "./words.ts";
 
+/** Translates a string literal type from one case to another */
 export type ChangeStringCase<
   String extends string,
   FromCase extends CaseName,
@@ -43,6 +49,8 @@ export type ChangeStringCase<
 > = FromCase extends ToCase ? String
   : WordsToString<ToCase, StringToWords<FromCase, String>>;
 
+// overload
+/** Translates a string from one case to another. The current case will be auto-detected if possible. */
 export function changeStringCase<
   const String extends string,
   const ToCase extends CaseName,
@@ -52,6 +60,9 @@ export function changeStringCase<
 ): DetectCaseNameFromString<String> extends infer FromCase extends CaseName
   ? ChangeStringCase<String, FromCase, ToCase>
   : String;
+
+// overload
+/** Translates a string from one provided case to another. */
 export function changeStringCase<
   const String extends string,
   const FromCase extends CaseName,
@@ -61,6 +72,8 @@ export function changeStringCase<
   fromCase: FromCase,
   toCase: ToCase,
 ): ChangeStringCase<String, FromCase, ToCase>;
+
+// impl
 export function changeStringCase(
   string: string,
   ...props: [CaseName, CaseName] | [CaseName]
@@ -80,6 +93,7 @@ export function changeStringCase(
   );
 }
 
+/** Attempts to identify the current case of a string literal type and return a CaseName. Returns 'undefined' if unsuccesfull */
 export type DetectCaseNameFromString<String extends string> = "" extends String
   ? undefined
   : IsSnakeCase<String> extends true ? SnakeCaseName
@@ -122,6 +136,7 @@ function _detectCaseNameFromString(string: string): CaseName | undefined {
   return undefined;
 }
 
+/** Attempts to identify the current case of a string literal and return a CaseName. Returns 'undefined' if unsuccesfull */
 export function detectCaseNameFromString<String extends string>(
   string: String,
 ): DetectCaseNameFromString<String> {

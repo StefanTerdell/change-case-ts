@@ -1,20 +1,32 @@
 /**
- * This library contains helpers to convert strings and property names from one case to another.
+ * This library contains functions and types to convert strings, tuple members and property names from one case to another.
  *
- * While there are plenty of other packages that does the same, this library includes full type support for literals.
+ * While there are plenty of other packages that does the same at runtime, this library is built for full type support.
+ *
+ * Useful for converting known models for interacting with external APIs.
  *
  * @example
  * ```typescript
- * import { changeStringCase } from "@stefan/change-case-ts";
+ * import { changeCase } from "@stefan/change-case-ts";
  *
- * changeStringCase(
+ * changeCase(
  *   "howAboutThemApples",
+ *   "SCREAMING-KEBAB-CASE",
+ * ) satisfies "HOW-ABOUT-THEM-APPLES";
+ *
+ * changeCase(
+ *   {
+ *     some_number: 123,
+ *     another_property: true,
+ *   },
  *   "camelCase",
- *   "snake_case",
- * ) satisfies "how_about_them_apples";
+ * ) satisfies {
+ *   someNumber: 123;
+ *   anotherProperty: true;
+ * };
  * ```
  *
- * Currently, the following cases are supported:
+ * The following cases are currently supported:
  * - Non-delimited cases:
  *   - `lowercase`
  *   - `UPPERCASE`
@@ -23,14 +35,15 @@
  *   - `UpperCase`
  * - Symbol-delimited cases:
  *   - `snake_case`
- *   - `UPPER_SNAKE_CASE` (aka `SCREAMING_SNAKE_CASE`)
+ *   - `UPPER_SNAKE_CASE` (a.k.a. `SCREAMING_SNAKE_CASE` and `CONSTANT_CASE`)
  *   - `kebab-case`
- *   - `UPPER-KEBAB-CASE` (aka `SCREAMING-KEBAB-CASE`)
+ *   - `UPPER-KEBAB-CASE` (a.k.a. `SCREAMING-KEBAB-CASE`)
  *
  * @module
  */
 
 export * from "./cases.ts";
 export * from "./string.ts";
-export * from "./tuple.ts";
+export * from "./array.ts";
 export * from "./object.ts";
+export * from "./unknown.ts";
