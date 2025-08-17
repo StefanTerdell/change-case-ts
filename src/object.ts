@@ -2,15 +2,15 @@ import type { CaseName } from "./cases.ts";
 import { type ChangeStringCase, changeStringCase } from "./string.ts";
 import type { UnionToTuple } from "./utils.ts";
 
-export type ChangeObjectCase<
+export type ChangeKeysCase<
   Object extends { [key: string]: unknown },
   FromCase extends CaseName,
   ToCase extends CaseName,
 > = UnionToTuple<keyof Object> extends infer Keys extends string[]
-  ? BuildObjectChangedKeys<Object, ChangeKeysCase<Keys, FromCase, ToCase>>
+  ? BuildObjectFromKeyTuple<Object, ChangeKeyTupleCase<Keys, FromCase, ToCase>>
   : Object;
 
-export function changeObjectCase<
+export function changeKeysCase<
   const Object extends { [key: string]: unknown },
   const FromCase extends CaseName,
   const ToCase extends CaseName,
@@ -18,20 +18,20 @@ export function changeObjectCase<
   object: Object,
   fromCase: FromCase,
   toCase: ToCase,
-): ChangeObjectCase<Object, FromCase, ToCase> {
+): ChangeKeysCase<Object, FromCase, ToCase> {
   return Object.keys(object).reduce((acc: Record<string, unknown>, key) => {
     acc[changeStringCase(key, fromCase, toCase)] = object[key as keyof Object];
     return acc;
-  }, {}) as ChangeObjectCase<Object, FromCase, ToCase>;
+  }, {}) as ChangeKeysCase<Object, FromCase, ToCase>;
 }
 
-type ChangeKeysCase<
+type ChangeKeyTupleCase<
   Keys extends string[],
   FromCase extends CaseName,
   ToCase extends CaseName,
   Acc extends { prevKey: Keys[number]; newKey: string }[] = [],
 > = Keys extends [infer Head extends string, ...infer Tail extends string[]]
-  ? ChangeKeysCase<
+  ? ChangeKeyTupleCase<
     Tail,
     FromCase,
     ToCase,
@@ -42,7 +42,7 @@ type ChangeKeysCase<
   >
   : Acc;
 
-type BuildObjectChangedKeys<
+type BuildObjectFromKeyTuple<
   SourceObject extends { [key: string]: unknown },
   ChangedKeys extends { prevKey: keyof SourceObject; newKey: string }[],
   Acc extends { [key: string]: unknown } = { [key: string]: unknown },
@@ -52,7 +52,7 @@ type BuildObjectChangedKeys<
     newKey: infer ToKey extends string;
   },
   ...infer Tail extends { prevKey: keyof SourceObject; newKey: string }[],
-] ? BuildObjectChangedKeys<
+] ? BuildObjectFromKeyTuple<
     SourceObject,
     Tail,
     Acc & { [Key in ToKey]: SourceObject[FromKey] }

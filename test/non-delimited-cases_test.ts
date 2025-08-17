@@ -1,4 +1,3 @@
-import { assertEquals } from "@std/assert";
 import {
   charToLowerCase,
   charToUpperCase,
@@ -11,6 +10,7 @@ import {
   wordsToLowerCase,
   wordsToUpperCase,
 } from "../src/non-delimited-cases.ts";
+import { assertEqualsT } from "./utils.ts";
 
 "abc__d" satisfies StringToLowerCase<"AbC__d">;
 // @ts-expect-error: test
@@ -24,58 +24,34 @@ import {
 // @ts-expect-error: test
 "AbC__d" satisfies StringToUpperCase<"AbC__d">;
 
-Deno.test(function charToLowerCaseShouldWork() {
-  const result = charToLowerCase("Å");
-  const expected: typeof result = "å";
-
-  assertEquals(result, expected);
+Deno.test("charToLowerCase", () => {
+  assertEqualsT(charToLowerCase("Å"), "å");
 });
 
-Deno.test(function charToUpperCaseShouldWork() {
-  const result = charToUpperCase("å");
-  const expected: typeof result = "Å";
-
-  assertEquals(result, expected);
+Deno.test("charToUpperCase", () => {
+  assertEqualsT(charToUpperCase("å"), "Å");
 });
 
-Deno.test(function stringToLowerCaseShouldWork() {
-  const result = stringToLowerCase("ÅÄÖ");
-  const expected: typeof result = "åäö";
-
-  assertEquals(result, expected);
+Deno.test("stringToLowerCase", () => {
+  assertEqualsT(stringToLowerCase("ÅÄÖ"), "åäö");
 });
 
-Deno.test(function stringToUpperCaseShouldWork() {
-  const result = stringToUpperCase("åäö");
-  const expected: typeof result = "ÅÄÖ";
-
-  assertEquals(result, expected);
+Deno.test("stringToUpperCase", () => {
+  assertEqualsT(stringToUpperCase("åäö"), "ÅÄÖ");
 });
 
-Deno.test(function lowerCaseToWordsShouldWork() {
-  const result = lowerCaseToWords("åäö");
-  const expected: typeof result = ["åäö"];
-
-  assertEquals(result, expected);
+Deno.test("lowerCaseToWords", () => {
+  assertEqualsT(lowerCaseToWords("åäö"), ["åäö"]);
 });
 
-Deno.test(function upperCaseToWordsShouldWork() {
-  const result = upperCaseToWords("ÅÄÖ");
-  const expected: typeof result = ["ÅÄÖ"];
-
-  assertEquals(result, expected);
+Deno.test("upperCaseToWords", () => {
+  assertEqualsT(upperCaseToWords("ÅÄÖ"), ["åäö"]);
 });
 
-Deno.test(function wordsToLowerCaseShouldWork() {
-  const result = wordsToLowerCase(["Å", "Ä", "Ö"]);
-  const expected: typeof result = "åäö";
-
-  assertEquals(result, expected);
+Deno.test("wordsToLowerCase", () => {
+  assertEqualsT(wordsToLowerCase(["Å", "Ä", "Ö"]), "åäö");
 });
 
-Deno.test(function wordsToUpperCaseShouldWork() {
-  const result = wordsToUpperCase(["å", "ä", "ö"]);
-  const expected: typeof result = "ÅÄÖ";
-
-  assertEquals(result, expected);
+Deno.test("wordsToUpperCase", () => {
+  assertEqualsT(wordsToUpperCase(["å", "ä", "ö"]), "ÅÄÖ");
 });

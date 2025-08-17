@@ -9,7 +9,7 @@ import {
   wordsToPascalCase,
 } from "../src/capitalization-delimited-cases.ts";
 
-import { assertEquals } from "@std/assert";
+import { assertEqualsT } from "./utils.ts";
 
 ["hello", "world123!"] satisfies
   & PascalCaseToWords<"HelloWorld123!">
@@ -22,30 +22,34 @@ import { assertEquals } from "@std/assert";
 "dinMammaEnPappa" satisfies WordsToCamelCase<["din", "MAMMA", "en", "pApPa"]>;
 "DinMammaEnPappa" satisfies WordsToPascalCase<["din", "MAMMA", "en", "pApPa"]>;
 
-Deno.test(function wordsToCamelCaseShouldWork() {
-  const result = wordsToCamelCase(["din", "MAMMA", "en", "pApPa"]);
-  const expected: typeof result = "dinMammaEnPappa";
-
-  assertEquals(result, expected);
+Deno.test("wordsToCamelCase", () => {
+  assertEqualsT(
+    wordsToCamelCase(["din", "MAMMA", "en", "pApPa"]),
+    "dinMammaEnPappa",
+  );
 });
 
-Deno.test(function wordsToPascalCaseShouldWork() {
-  const result = wordsToPascalCase(["din", "MAMMA", "en", "pApPa"]);
-  const expected: typeof result = "DinMammaEnPappa";
-
-  assertEquals(result, expected);
+Deno.test("wordsToPascalCase", () => {
+  assertEqualsT(
+    wordsToPascalCase(["din", "MAMMA", "en", "pApPa"]),
+    "DinMammaEnPappa",
+  );
 });
 
-Deno.test(function camelCaseToWordsShouldWork() {
-  const result = camelCaseToWords("dinMammaEnPappa");
-  const expected: typeof result = ["din", "mamma", "en", "pappa"];
-
-  assertEquals(result, expected);
+Deno.test("camelCaseToWords", () => {
+  assertEqualsT(camelCaseToWords("dinMammaEnPappa"), [
+    "din",
+    "mamma",
+    "en",
+    "pappa",
+  ]);
 });
 
-Deno.test(function pascalCaseToWordsShouldWork() {
-  const result = pascalCaseToWords("DinMammaEnPappa");
-  const expected: typeof result = ["din", "mamma", "en", "pappa"];
-
-  assertEquals(result, expected);
+Deno.test("pascalCaseToWords", () => {
+  assertEqualsT(pascalCaseToWords("DinMammaEnPappa"), [
+    "din",
+    "mamma",
+    "en",
+    "pappa",
+  ]);
 });

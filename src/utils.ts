@@ -8,3 +8,5 @@ export type UnionToTuple<Union> = UnionToIntersection<
 > extends (_: never) => infer Member
   ? [...UnionToTuple<Exclude<Union, Member>>, Member]
   : [];
+
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };

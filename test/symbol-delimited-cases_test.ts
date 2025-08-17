@@ -1,4 +1,3 @@
-import { assertEquals } from "@std/assert";
 import {
   type KebabCaseToWords,
   kebabCaseToWords,
@@ -17,6 +16,7 @@ import {
   type WordsToUpperSnakeCase,
   wordsToUpperSnakeCase,
 } from "../src/symbol-delimited-cases.ts";
+import { assertEqualsT } from "./utils.ts";
 
 ["hello", "world", "123"] satisfies KebabCaseToWords<"hello-world-123">;
 "hello-world-123" satisfies WordsToKebabCase<["hello", "world", "123"]>;
@@ -67,58 +67,66 @@ import {
   "pappa",
 ] satisfies UpperSnakeCaseToWords<"DIN_MAMMA_EN_PAPPA">;
 
-Deno.test(function snakeCaseToWordsShouldWork() {
-  const result = snakeCaseToWords("din_mamma_en_pappa");
-  const expected: typeof result = ["din", "mamma", "en", "pappa"];
-
-  assertEquals(result, expected);
+Deno.test("snakeCaseToWords", () => {
+  assertEqualsT(snakeCaseToWords("din_mamma_en_pappa"), [
+    "din",
+    "mamma",
+    "en",
+    "pappa",
+  ]);
 });
 
-Deno.test(function upperSnakeCaseToWordsShouldWork() {
-  const result = upperSnakeCaseToWords("DIN_MAMMA_EN_PAPPA");
-  const expected: typeof result = ["din", "mamma", "en", "pappa"];
-
-  assertEquals(result, expected);
+Deno.test("upperSnakeCaseToWords", () => {
+  assertEqualsT(upperSnakeCaseToWords("DIN_MAMMA_EN_PAPPA"), [
+    "din",
+    "mamma",
+    "en",
+    "pappa",
+  ]);
 });
 
-Deno.test(function kebabCaseToWordsShouldWork() {
-  const result = kebabCaseToWords("din-mamma-en-pappa");
-  const expected: typeof result = ["din", "mamma", "en", "pappa"];
-
-  assertEquals(result, expected);
+Deno.test("kebabCaseToWords", () => {
+  assertEqualsT(kebabCaseToWords("din-mamma-en-pappa"), [
+    "din",
+    "mamma",
+    "en",
+    "pappa",
+  ]);
 });
 
-Deno.test(function upperKebabCaseToWordsShouldWork() {
-  const result = upperKebabCaseToWords("DIN-MAMMA-EN-PAPPA");
-  const expected: typeof result = ["din", "mamma", "en", "pappa"];
-
-  assertEquals(result, expected);
+Deno.test("upperKebabCaseToWords", () => {
+  assertEqualsT(upperKebabCaseToWords("DIN-MAMMA-EN-PAPPA"), [
+    "din",
+    "mamma",
+    "en",
+    "pappa",
+  ]);
 });
 
-Deno.test(function wordsToSnakeCaseShouldWork() {
-  const result = wordsToSnakeCase(["din", "mamma", "en", "pappa"]);
-  const expected: typeof result = "din_mamma_en_pappa";
-
-  assertEquals(result, expected);
+Deno.test("wordsToSnakeCase", () => {
+  assertEqualsT(
+    wordsToSnakeCase(["din", "mamma", "en", "pappa"]),
+    "din_mamma_en_pappa",
+  );
 });
 
-Deno.test(function wordsToUpperSnakeCaseShouldWork() {
-  const result = wordsToUpperSnakeCase(["din", "mamma", "en", "pappa"]);
-  const expected: typeof result = "DIN_MAMMA_EN_PAPPA";
-
-  assertEquals(result, expected);
+Deno.test("wordsToUpperSnakeCase", () => {
+  assertEqualsT(
+    wordsToUpperSnakeCase(["din", "mamma", "en", "pappa"]),
+    "DIN_MAMMA_EN_PAPPA",
+  );
 });
 
-Deno.test(function wordsToKebabCaseShouldWork() {
-  const result = wordsToKebabCase(["din", "mamma", "en", "pappa"]);
-  const expected: typeof result = "din-mamma-en-pappa";
-
-  assertEquals(result, expected);
+Deno.test("wordsToKebabCase", () => {
+  assertEqualsT(
+    wordsToKebabCase(["din", "mamma", "en", "pappa"]),
+    "din-mamma-en-pappa",
+  );
 });
 
-Deno.test(function wordsToUpperKebabCaseShouldWork() {
-  const result = wordsToUpperKebabCase(["din", "mamma", "en", "pappa"]);
-  const expected: typeof result = "DIN-MAMMA-EN-PAPPA";
-
-  assertEquals(result, expected);
+Deno.test("wordsToUpperKebabCase", () => {
+  assertEqualsT(
+    wordsToUpperKebabCase(["din", "mamma", "en", "pappa"]),
+    "DIN-MAMMA-EN-PAPPA",
+  );
 });

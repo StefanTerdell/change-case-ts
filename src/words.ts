@@ -31,6 +31,7 @@ import {
   isKebabCaseName,
   isSnakeCaseName,
   isUpperKebabCaseName,
+  isUpperSnakeCaseName,
   type KebabCaseName,
   type KebabCaseToWords,
   kebabCaseToWords,
@@ -89,7 +90,7 @@ export function wordsToString<
       ? wordsToSnakeCase(words)
       : isKebabCaseName(caseName)
       ? wordsToKebabCase(words)
-      : isUpperCaseName(caseName)
+      : isUpperSnakeCaseName(caseName)
       ? wordsToUpperSnakeCase(words)
       : isUpperKebabCaseName(caseName)
       ? wordsToUpperKebabCase(words)
@@ -130,7 +131,7 @@ export function stringToWords<
       ? snakeCaseToWords(string)
       : isKebabCaseName(caseName)
       ? kebabCaseToWords(string)
-      : isUpperCaseName(caseName)
+      : isUpperSnakeCaseName(caseName)
       ? upperSnakeCaseToWords(string)
       : isUpperKebabCaseName(caseName)
       ? upperKebabCaseToWords(string)

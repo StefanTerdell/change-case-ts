@@ -147,12 +147,14 @@ export function wordsToUpperCaseWords<const Words extends string[]>(
   >;
 }
 
-export type UpperCaseToWords<String extends string> = [String];
+export type UpperCaseToWords<String extends string> = [
+  StringToLowerCase<String>,
+];
 
 export function upperCaseToWords<const String extends string>(
   string: String,
 ): UpperCaseToWords<String> {
-  return [stringToUpperCase(string)] as UpperCaseToWords<String>;
+  return [stringToLowerCase(string)] as UpperCaseToWords<String>;
 }
 
 export type WordsToUpperCase<
