@@ -1,6 +1,8 @@
 import {
   type CamelCaseToWords,
   camelCaseToWords,
+  isCamelCase,
+  isPascalCase,
   type PascalCaseToWords,
   pascalCaseToWords,
   type WordsToCamelCase,
@@ -36,6 +38,22 @@ Deno.test("wordsToPascalCase", () => {
   );
 });
 
+Deno.test("isPascalCase", () => {
+  assertEqualsT(isPascalCase("PascalCase"), true);
+});
+
+Deno.test("isPascalCase - not camelCase", () => {
+  assertEqualsT(isPascalCase("camelCase"), false);
+});
+
+Deno.test("isPascalCase - not UPPERCASE", () => {
+  assertEqualsT(isPascalCase("UPPERCASE"), false);
+});
+
+Deno.test("isPascalCase - not lowercase", () => {
+  assertEqualsT(isPascalCase("lowercase"), false);
+});
+
 Deno.test("camelCaseToWords", () => {
   assertEqualsT(camelCaseToWords("dinMammaEnPappa"), [
     "din",
@@ -52,4 +70,20 @@ Deno.test("pascalCaseToWords", () => {
     "en",
     "pappa",
   ]);
+});
+
+Deno.test("isCamelCase", () => {
+  assertEqualsT(isCamelCase("camelCase"), true);
+});
+
+Deno.test("isCamelCase - not PascalCase", () => {
+  assertEqualsT(isCamelCase("PascalCase"), false);
+});
+
+Deno.test("isCamelCase - not UPPERCASE", () => {
+  assertEqualsT(isCamelCase("UPPERCASE"), false);
+});
+
+Deno.test("isCamelCase - not lowercase", () => {
+  assertEqualsT(isCamelCase("lowercase"), false);
 });

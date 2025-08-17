@@ -1,13 +1,15 @@
-export type UpperCaseName = "UPPERCASE";
+export const UPPER_CASE = "UPPERCASE";
+export type UpperCaseName = typeof UPPER_CASE;
 
 export function isUpperCaseName(caseName: string): caseName is UpperCaseName {
-  return caseName === ("UPPERCASE" satisfies UpperCaseName);
+  return caseName === (UPPER_CASE satisfies UpperCaseName);
 }
 
-export type LowerCaseName = "lowercase";
+export const LOWER_CASE = "lowercase";
+export type LowerCaseName = typeof LOWER_CASE;
 
 export function isLowerCaseName(caseName: string): caseName is LowerCaseName {
-  return caseName === ("lowercase" satisfies LowerCaseName);
+  return caseName === (LOWER_CASE satisfies LowerCaseName);
 }
 
 export type NonDelimitedCaseName = UpperCaseName | LowerCaseName;
@@ -19,6 +21,17 @@ export function isNonDelimitedCaseName(
 }
 
 // Lower case
+
+export type IsLowerCase<String extends string> = String extends "" ? false
+  : String extends StringToLowerCase<String> ? true
+  : false;
+
+export function isLowerCase<String extends string>(
+  string: String,
+): IsLowerCase<String> {
+  // deno-lint-ignore no-explicit-any
+  return string !== "" && (string === string.toLocaleLowerCase()) as any;
+}
 
 export type CharToLowerCase<Char extends string> = Char extends
   keyof UpperToLowerCaseCharMap ? UpperToLowerCaseCharMap[Char]
@@ -97,6 +110,16 @@ export function wordsToLowerCase<const Words extends string[]>(
 }
 
 // Upper case
+export type IsUpperCase<String extends string> = String extends "" ? false
+  : String extends StringToUpperCase<String> ? true
+  : false;
+
+export function isUpperCase<String extends string>(
+  string: String,
+): IsUpperCase<String> {
+  // deno-lint-ignore no-explicit-any
+  return string !== "" && (string === string.toLocaleUpperCase()) as any;
+}
 
 export type CharToUpperCase<Char extends string> = Char extends
   keyof LowerToUpperCaseCharMap ? LowerToUpperCaseCharMap[Char]

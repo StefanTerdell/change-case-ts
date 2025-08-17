@@ -1,19 +1,30 @@
-import type {
-  StringToLowerCase,
-  UpperToLowerCaseCharMap,
+import {
+  isLowerCase,
+  isUpperCase,
+  type LowerToUpperCaseCharMap,
+  lowerToUpperCaseCharMap,
+  type StringToLowerCase,
+  type UpperToLowerCaseCharMap,
+  upperToLowerCaseCharMap,
 } from "./non-delimited-cases.ts";
-import type { CharToUpperCase } from "./non-delimited-cases.ts";
+import type {
+  CharToUpperCase,
+  IsLowerCase,
+  IsUpperCase,
+} from "./non-delimited-cases.ts";
 
-export type CamelCaseName = "camelCase";
+export const CAMEL_CASE = "camelCase";
+export type CamelCaseName = typeof CAMEL_CASE;
 
 export function isCamelCaseName(caseName: string): caseName is CamelCaseName {
-  return caseName === ("camelCase" satisfies CamelCaseName);
+  return caseName === (CAMEL_CASE satisfies CamelCaseName);
 }
 
-export type PascalCaseName = "PascalCase";
+export const PASCAL_CASE = "PascalCase";
+export type PascalCaseName = typeof PASCAL_CASE;
 
 export function isPascalCaseName(caseName: string): caseName is PascalCaseName {
-  return caseName === ("PascalCase" satisfies PascalCaseName);
+  return caseName === (PASCAL_CASE satisfies PascalCaseName);
 }
 
 export type CapitalizationDelimitedCaseName = CamelCaseName | PascalCaseName;
@@ -22,6 +33,22 @@ export function isCapitalizationDelimitedCaseName(
   caseName: string,
 ): caseName is CapitalizationDelimitedCaseName {
   return isCamelCaseName(caseName) || isPascalCaseName(caseName);
+}
+
+export type IsCapitalizationDelimitedCase<String extends string> =
+  IsLowerCase<String> extends true ? false
+    : IsUpperCase<String> extends true ? false
+    : CapitalizationDelimitedCaseToWords<String>["length"] extends
+      infer Length extends number
+      ? Length extends 0 ? false : Length extends 1 ? false : true
+    : false;
+
+export function isCapitalizationDelimitedCase<String extends string>(
+  string: String,
+): IsCapitalizationDelimitedCase<String> {
+  return !isLowerCase(string) && !isUpperCase(string) &&
+    // deno-lint-ignore no-explicit-any
+    capitalizationDelimitedStringToWords(string).length > 1 as any;
 }
 
 type CapitalizationDelimitedCaseToWords<
@@ -63,6 +90,19 @@ function capitalizationDelimitedStringToWords<String extends string>(
   return words as PascalCaseToWords<String>;
 }
 
+export type IsCamelCase<String extends string> = String extends
+  `${keyof LowerToUpperCaseCharMap}${string}`
+  ? IsCapitalizationDelimitedCase<String>
+  : false;
+
+export function isCamelCase<String extends string>(
+  string: String,
+): IsCamelCase<String> {
+  return string[0] in lowerToUpperCaseCharMap &&
+    // deno-lint-ignore no-explicit-any
+    isCapitalizationDelimitedCase(string) as any;
+}
+
 export type CamelCaseToWords<String extends string> =
   CapitalizationDelimitedCaseToWords<String>;
 
@@ -70,6 +110,19 @@ export function camelCaseToWords<String extends string>(
   string: String,
 ): CamelCaseToWords<String> {
   return capitalizationDelimitedStringToWords(string);
+}
+
+export type IsPascalCase<String extends string> = String extends
+  `${keyof UpperToLowerCaseCharMap}${string}`
+  ? IsCapitalizationDelimitedCase<String>
+  : false;
+
+export function isPascalCase<String extends string>(
+  string: String,
+): IsPascalCase<String> {
+  return string[0] in upperToLowerCaseCharMap &&
+    // deno-lint-ignore no-explicit-any
+    isCapitalizationDelimitedCase(string) as any;
 }
 
 export type PascalCaseToWords<S extends string> =
