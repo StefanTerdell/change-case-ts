@@ -56,3 +56,38 @@ Deno.test("changeCase - keys", () => {
     },
   );
 });
+
+Deno.test("changeCase - detect - string", () => {
+  "HejHej" satisfies ChangeCase<"hejHej", "camelCase", "PascalCase">;
+
+  assertEqualsT(changeCase("hejHej", "PascalCase"), "HejHej");
+});
+
+Deno.test("changeCase - detect - tuple", () => {
+  assertEqualsT(
+    changeCase(
+      [123, true, "hello-world", null],
+      "PascalCase",
+    ),
+    [
+      123,
+      true,
+      "HelloWorld",
+      null,
+    ],
+  );
+});
+
+Deno.test("changeCase - detect - keys", () => {
+  assertEqualsT(
+    changeCase(
+      {
+        helloWorld: true,
+      },
+      "PascalCase",
+    ),
+    {
+      "HelloWorld": true,
+    },
+  );
+});

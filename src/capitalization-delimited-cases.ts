@@ -113,16 +113,19 @@ export function camelCaseToWords<String extends string>(
 }
 
 export type IsPascalCase<String extends string> = String extends
-  `${keyof UpperToLowerCaseCharMap}${string}`
-  ? IsCapitalizationDelimitedCase<String>
+  `${keyof UpperToLowerCaseCharMap}${infer Rest extends string}`
+  ? IsLowerCase<Rest> extends true ? true
+  : IsCapitalizationDelimitedCase<String>
   : false;
 
 export function isPascalCase<String extends string>(
   string: String,
 ): IsPascalCase<String> {
+  const rest = string.substring(1);
   return string[0] in upperToLowerCaseCharMap &&
-    // deno-lint-ignore no-explicit-any
-    isCapitalizationDelimitedCase(string) as any;
+    ((rest.length && rest.toLocaleLowerCase() === rest) ||
+      // deno-lint-ignore no-explicit-any
+      isCapitalizationDelimitedCase(string) as any);
 }
 
 export type PascalCaseToWords<S extends string> =

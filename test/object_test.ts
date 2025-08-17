@@ -2,7 +2,11 @@ import type {
   CamelCaseName,
   PascalCaseName,
 } from "../src/capitalization-delimited-cases.ts";
-import { type ChangeKeysCase, changeKeysCase } from "../src/object.ts";
+import {
+  type ChangeKeysCase,
+  changeKeysCase,
+  detectCaseNameFromKeys,
+} from "../src/object.ts";
 import type {
   KebabCaseName,
   UpperSnakeCaseName,
@@ -18,19 +22,18 @@ Deno.test("changeKeysCase - camelCase to PascalCase", () => {
     PascalCaseName
   >;
 
-  const result = changeKeysCase(
+  assertEqualsT(
+    changeKeysCase(
+      {
+        helloWorld: true,
+      },
+      "camelCase",
+      "PascalCase",
+    ),
     {
-      helloWorld: true,
+      "HelloWorld": true,
     },
-    "camelCase",
-    "PascalCase",
   );
-
-  const expected: typeof result = {
-    "HelloWorld": true,
-  };
-
-  assertEqualsT(result, expected);
 });
 
 Deno.test("changeKeysCase - kebab-case to UPPER_SNAKE_CASE", () => {
@@ -42,17 +45,37 @@ Deno.test("changeKeysCase - kebab-case to UPPER_SNAKE_CASE", () => {
     UpperSnakeCaseName
   >;
 
-  const result = changeKeysCase(
+  assertEqualsT(
+    changeKeysCase(
+      {
+        "hello-world": true,
+      },
+      "kebab-case",
+      "UPPER_SNAKE_CASE",
+    ),
     {
-      "hello-world": true,
+      "HELLO_WORLD": true,
     },
-    "kebab-case",
-    "UPPER_SNAKE_CASE",
   );
+});
 
-  const expected: typeof result = {
-    "HELLO_WORLD": true,
-  };
+Deno.test("detectCaseNameFromKeys - delimited cases take precedent", () => {
+  assertEqualsT(
+    detectCaseNameFromKeys({
+      "derp": false,
+      "herp-derp": true,
+      "herp": false,
+    }),
+    "kebab-case",
+  );
+});
 
-  assertEqualsT(result, expected);
+Deno.test("detectCaseNameFromKeys - non-delimited cases work too", () => {
+  assertEqualsT(
+    detectCaseNameFromKeys({
+      "HERP": false,
+      "DERP": false,
+    }),
+    "UPPERCASE",
+  );
 });

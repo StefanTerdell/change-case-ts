@@ -1,6 +1,20 @@
 import type { CaseName } from "./cases.ts";
 import { type ChangeStringCase, changeStringCase } from "./string.ts";
+import {
+  type DetectCaseNameFromTuple,
+  detectCaseNameFromTuple,
+} from "./tuple.ts";
 import type { UnionToTuple } from "./utils.ts";
+
+export type DetectCaseNameFromKeys<Object extends { [key: string]: unknown }> =
+  DetectCaseNameFromTuple<UnionToTuple<keyof Object>>;
+
+export function detectCaseNameFromKeys<
+  Object extends { [key: string]: unknown },
+>(object: Object): DetectCaseNameFromKeys<Object> {
+  // deno-lint-ignore no-explicit-any
+  return detectCaseNameFromTuple(Object.keys(object)) as any;
+}
 
 export type ChangeKeysCase<
   Object extends { [key: string]: unknown },
@@ -12,17 +26,39 @@ export type ChangeKeysCase<
 
 export function changeKeysCase<
   const Object extends { [key: string]: unknown },
+  const ToCase extends CaseName,
+>(
+  object: Object,
+  toCase: ToCase,
+): DetectCaseNameFromKeys<Object> extends infer FromCase extends CaseName
+  ? ChangeKeysCase<Object, FromCase, ToCase>
+  : Object;
+export function changeKeysCase<
+  const Object extends { [key: string]: unknown },
   const FromCase extends CaseName,
   const ToCase extends CaseName,
 >(
   object: Object,
   fromCase: FromCase,
   toCase: ToCase,
-): ChangeKeysCase<Object, FromCase, ToCase> {
+): ChangeKeysCase<Object, FromCase, ToCase>;
+export function changeKeysCase(
+  object: { [key: string]: unknown },
+  ...props: [CaseName, CaseName] | [CaseName]
+) {
+  const toCase = props.length === 2 ? props[1] : props[0];
+  const fromCase = props.length === 2
+    ? props[0]
+    : detectCaseNameFromKeys(object);
+
+  if (fromCase === undefined) {
+    return object;
+  }
+
   return Object.keys(object).reduce((acc: Record<string, unknown>, key) => {
-    acc[changeStringCase(key, fromCase, toCase)] = object[key as keyof Object];
+    acc[changeStringCase(key, fromCase, toCase)] = object[key];
     return acc;
-  }, {}) as ChangeKeysCase<Object, FromCase, ToCase>;
+  }, {});
 }
 
 type ChangeKeyTupleCase<

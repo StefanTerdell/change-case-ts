@@ -54,6 +54,10 @@ Deno.test("isPascalCase - not lowercase", () => {
   assertEqualsT(isPascalCase("lowercase"), false);
 });
 
+Deno.test("isPascalCase - not empty", () => {
+  assertEqualsT(isPascalCase(""), false);
+});
+
 Deno.test("camelCaseToWords", () => {
   assertEqualsT(camelCaseToWords("dinMammaEnPappa"), [
     "din",
@@ -86,4 +90,8 @@ Deno.test("isCamelCase - not UPPERCASE", () => {
 
 Deno.test("isCamelCase - not lowercase", () => {
   assertEqualsT(isCamelCase("lowercase"), false);
+});
+
+Deno.test("isCamelCase - not empty", () => {
+  assertEqualsT(isCamelCase(""), false);
 });

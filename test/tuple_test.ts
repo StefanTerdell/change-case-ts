@@ -1,6 +1,10 @@
 import type { PascalCaseName } from "../src/capitalization-delimited-cases.ts";
 import type { KebabCaseName } from "../src/symbol-delimited-cases.ts";
-import { type ChangeTupleCase, changeTupleCase } from "../src/tuple.ts";
+import {
+  type ChangeTupleCase,
+  changeTupleCase,
+  detectCaseNameFromTuple,
+} from "../src/tuple.ts";
 import { assertEqualsT } from "./utils.ts";
 
 Deno.test("changeTupleCase", () => {
@@ -22,5 +26,12 @@ Deno.test("changeTupleCase", () => {
       "HelloWorld",
       null,
     ],
+  );
+});
+
+Deno.test("detectCaseNameFromTuple", () => {
+  assertEqualsT(
+    detectCaseNameFromTuple([123, "foo-bar", "derp"]),
+    "kebab-case",
   );
 });
