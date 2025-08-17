@@ -14,9 +14,9 @@ export type ChangeStringCase<
   : WordsToString<ToCase, StringToWords<FromCase, String>>;
 
 export function changeStringCase<
-  String extends string,
-  FromCase extends CaseName,
-  ToCase extends CaseName,
+  const String extends string,
+  const FromCase extends CaseName,
+  const ToCase extends CaseName,
 >(
   string: String,
   fromCase: FromCase,

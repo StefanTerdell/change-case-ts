@@ -76,8 +76,8 @@ type SymbolDelimitedCaseToWords<
   : [...WordsAcc, StringToLowerCase<Acc>];
 
 function symbolDelimitedCaseToWords<
-  Delimiter extends string,
-  String extends string,
+  const Delimiter extends string,
+  const String extends string,
 >(
   delimiter: Delimiter,
   string: String,

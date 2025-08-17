@@ -11,9 +11,9 @@ export type ChangeObjectCase<
   : Object;
 
 export function changeObjectCase<
-  Object extends { [key: string]: unknown },
-  FromCase extends CaseName,
-  ToCase extends CaseName,
+  const Object extends { [key: string]: unknown },
+  const FromCase extends CaseName,
+  const ToCase extends CaseName,
 >(
   object: Object,
   fromCase: FromCase,

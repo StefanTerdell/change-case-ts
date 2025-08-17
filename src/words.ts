@@ -73,7 +73,10 @@ type WordsToStringAcc<
   ? WordsToStringAcc<Tail, `${Acc}${Head}`>
   : Acc;
 
-export function wordsToString<Case extends CaseName, Words extends string[]>(
+export function wordsToString<
+  const Case extends CaseName,
+  const Words extends string[],
+>(
   caseName: Case,
   words: Words,
 ): WordsToString<Case, Words> {
@@ -111,7 +114,10 @@ export type StringToWords<
   : Case extends UpperKebabCaseName ? UpperKebabCaseToWords<String>
   : [String];
 
-export function stringToWords<Case extends CaseName, String extends string>(
+export function stringToWords<
+  const Case extends CaseName,
+  const String extends string,
+>(
   caseName: Case,
   string: String,
 ): StringToWords<Case, String> {

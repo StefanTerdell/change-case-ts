@@ -23,9 +23,9 @@ type ChangeTupleCaseAcc<
   : Acc;
 
 export function changeTupleCase<
-  Tuple extends unknown[],
-  FromCase extends CaseName,
-  ToCase extends CaseName,
+  const Tuple extends unknown[],
+  const FromCase extends CaseName,
+  const ToCase extends CaseName,
 >(
   tuple: Tuple,
   fromCase: FromCase,
