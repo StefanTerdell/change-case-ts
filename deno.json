@@ -1,7 +1,7 @@
 {
   "name": "@stefan/change-case-ts",
   "exports": "./src/lib.ts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "ISC",
   "tasks": {
     "dev": "deno run --watch src/lib.ts",
