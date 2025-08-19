@@ -57,21 +57,21 @@ Deno.test("stringToWords - CONSTANT_CASE", () => {
   );
 });
 
-Deno.test("stringToWordskebab- - case", () => {
+Deno.test("stringToWords - kebab-case", () => {
   assertEqualsT(
     stringToWords("kebab-case", "hello-world"),
     ["hello", "world"],
   );
 });
 
-Deno.test("stringToWordsUPPER-KEBAB- - CASE", () => {
+Deno.test("stringToWords - UPPER-KEBAB-CASE", () => {
   assertEqualsT(
     stringToWords("UPPER-KEBAB-CASE", "HELLO-WORLD"),
     ["hello", "world"],
   );
 });
 
-Deno.test("stringToWordsSCREAMING-KEBAB- - CASE", () => {
+Deno.test("stringToWords - SCREAMING-KEBAB-CASE", () => {
   assertEqualsT(
     stringToWords("SCREAMING-KEBAB-CASE", "HELLO-WORLD"),
     ["hello", "world"],
