@@ -14,10 +14,6 @@ The library also exports types correlating to the functions mentioned above (suc
 
 ## Installation
 
-
-<details>
-<summary>Node/NPM</summary>
-
 ```sh
 npm install change-case-ts
 ```
@@ -25,29 +21,11 @@ npm install change-case-ts
 ```ts
 import { changeCase } from "change-case-ts";
 ```
-</details>
-
-<details>
-<summary>Deno/JSR</summary>
-
-```sh
-deno add jsr:@stefan/change-case-ts
-```
-
-```ts
-import { changeCase } from "@stefan/change-case-ts";
-```
-</details>
-
 
 ## Examples
 
 ### Changing the case of a string literal
 
-
-<details>
-<summary>Node/NPM</summary>
-
 ```ts
 import { changeCase } from "change-case-ts";
 
@@ -55,27 +33,9 @@ const stringLiteral = changeCase("howAboutThemApples", "SCREAMING-KEBAB-CASE");
 
 stringLiteral satisfies "HOW-ABOUT-THEM-APPLES";
 ```
-</details>
-
-<details>
-<summary>Deno/JSR</summary>
-
-```ts
-import { changeCase } from "@stefan/change-case-ts";
-
-const stringLiteral = changeCase("howAboutThemApples", "SCREAMING-KEBAB-CASE");
-
-stringLiteral satisfies "HOW-ABOUT-THEM-APPLES";
-```
-</details>
-
 
 ### Changing the case of an objects' keys
 
-
-<details>
-<summary>Node/NPM</summary>
-
 ```ts
 import { changeCase } from "change-case-ts";
 
@@ -98,42 +58,9 @@ objectKeys satisfies {
   }];
 };
 ```
-</details>
-
-<details>
-<summary>Deno/JSR</summary>
-
-```ts
-import { changeCase } from "@stefan/change-case-ts"; // or just "change-case-ts" if installed from NPM;
-
-const objectKeys = changeCase(
-  {
-    some_number: 123,
-    an_array: [
-      {
-        with_a_prop: true,
-      },
-    ],
-  },
-  "camelCase",
-);
-
-objectKeys satisfies {
-  someNumber: 123;
-  anArray: [{
-    withAProp: true;
-  }];
-};
-```
-</details>
-
 
 ### Changing the case of array or tuple values
 
-
-<details>
-<summary>Node/NPM</summary>
-
 ```ts
 import { changeCase } from "change-case-ts";
 
@@ -141,28 +68,10 @@ const tuples = changeCase(["foo-bar", "baz", 123], "PascalCase");
 
 tuples satisfies ["FooBar", "Baz", 123];
 ```
-</details>
-
-<details>
-<summary>Deno/JSR</summary>
-
-```ts
-import { changeCase } from "@stefan/change-case-ts";
-
-const tuples = changeCase(["foo-bar", "baz", 123], "PascalCase");
-
-tuples satisfies ["FooBar", "Baz", 123];
-```
-</details>
-
 
 ### Changing the keys of objects within an array
 
 We can't use `changeCase` in this example, as it will try and change any string literal values within the given array instead of the keys in the object items, so we specifically use `changeKeysCase` instead to remove the ambiguity.
-
-
-<details>
-<summary>Node/NPM</summary>
 
 ```ts
 import { changeKeysCase } from "change-case-ts";
@@ -177,32 +86,8 @@ const result = changeKeysCase(response, "camelCase");
 
 result satisfies Array<{ fooBar: string }>;
 ```
-</details>
-
-<details>
-<summary>Deno/JSR</summary>
-
-```ts
-import { changeKeysCase } from "@stefan/change-case-ts";
-
-type Response = Array<{ foo_bar: string }>;
-
-const response: Response = await fetch(
-  "https://www.example.com",
-).then((res) => res.json());
-
-const result = changeKeysCase(response, "camelCase");
-
-result satisfies Array<{ fooBar: string }>;
-```
-</details>
-
 
 ### Loading a .env-file and parsing with Zod
-
-
-<details>
-<summary>Node/NPM</summary>
 
 ```sh
 npm install --save-dev @types/node
@@ -230,38 +115,6 @@ env satisfies {
 
 console.log(env.myEnvVar);
 ```
-</details>
-
-<details>
-<summary>Deno/JSR</summary>
-
-```sh
-deno add npm:zod jsr:@std/env jsr:@stefan/change-case-ts
-```
-
-```ts
-import "@std/dotenv/load";
-import { changeCase } from "@stefan/change-case-ts";
-import z from "zod";
-
-const envSchema = z.object({
-  MY_ENV_VAR: z.string(),
-});
-
-const camelCaseEnvSchema = envSchema.transform((vars) =>
-  changeCase(vars, "camelCase")
-);
-
-const env = camelCaseEnvSchema.parse(Deno.env.toObject());
-
-env satisfies {
-  myEnvVar: string;
-};
-
-console.log(env.myEnvVar);
-```
-</details>
-
 
 ## Supported cases
 
