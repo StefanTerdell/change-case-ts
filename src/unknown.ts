@@ -53,7 +53,6 @@ export function detectCaseName(
   return undefined;
 }
 
-// overload
 /** Changes the case of a provided type. */
 export type ChangeCase<
   Value,
@@ -75,7 +74,8 @@ export function changeCase<const Value, const ToCase extends CaseName>(
   ? ChangeCase<Value, FromCase, ToCase>
   : Value;
 
-// impl
+// overload
+/** Changes the case of a provided value. */
 export function changeCase<
   const Value,
   const FromCase extends CaseName,
@@ -85,6 +85,8 @@ export function changeCase<
   fromCase: FromCase,
   toCase: ToCase,
 ): ChangeCase<Value, FromCase, ToCase>;
+
+// impl
 export function changeCase(
   value: unknown,
   ...props: [CaseName, CaseName] | [CaseName]

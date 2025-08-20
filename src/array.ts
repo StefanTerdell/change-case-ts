@@ -124,7 +124,7 @@ export function changeArrayCase<
   const Array extends unknown[],
   const ToCase extends CaseName,
 >(
-  tuple: Array,
+  array: Array,
   toCase: ToCase,
 ): DetectCaseNameFromArray<Array> extends infer FromCase extends CaseName
   ? ChangeArrayCase<Array, FromCase, ToCase>
@@ -133,30 +133,30 @@ export function changeArrayCase<
 // overload
 /** Translates the cases of any string literals within an array-like value (tuple or array) from one provided case to another. */
 export function changeArrayCase<
-  const ArrayLike extends unknown[],
+  const Array extends unknown[],
   const FromCase extends CaseName,
   const ToCase extends CaseName,
 >(
-  tuple: ArrayLike,
+  array: Array,
   fromCase: FromCase,
   toCase: ToCase,
-): ChangeArrayCase<ArrayLike, FromCase, ToCase>;
+): ChangeArrayCase<Array, FromCase, ToCase>;
 
 // impl
 export function changeArrayCase(
-  tuple: unknown[],
+  array: unknown[],
   ...props: [fromCase: CaseName, toCase: CaseName] | [toCase: CaseName]
 ) {
   const toCase = props.length === 2 ? props[1] : props[0];
   const fromCase = props.length === 2
     ? props[0]
-    : detectCaseNameFromArray(tuple);
+    : detectCaseNameFromArray(array);
 
   if (fromCase === undefined) {
-    return tuple;
+    return array;
   }
 
-  return tuple.map((item) =>
+  return array.map((item) =>
     typeof item === "string" ? changeStringCase(item, fromCase, toCase) : item
   );
 }

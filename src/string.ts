@@ -137,7 +137,7 @@ function _detectCaseNameFromString(string: string): CaseName | undefined {
 }
 
 /** Attempts to identify the current case of a string literal and return a CaseName. Returns 'undefined' if unsuccesfull */
-export function detectCaseNameFromString<String extends string>(
+export function detectCaseNameFromString<const String extends string>(
   string: String,
 ): DetectCaseNameFromString<String> {
   // deno-lint-ignore no-explicit-any

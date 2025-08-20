@@ -10,7 +10,12 @@ import {
   type DetectCaseNameFromArray,
   detectCaseNameFromArray,
 } from "./array.ts";
-import { type DeepKeyOf, deepKeyOf, type UnionToTuple } from "./utils.ts";
+import {
+  type DeepKeyOf,
+  deepKeyOf,
+  type UnionToTuple,
+  type Writeable,
+} from "./utils.ts";
 
 /** Attempts to identify the shared CaseName of the keys of an object type and return a CaseName. Returns 'undefined' if more than one CaseName is identified, except if one of them is a non-delimited case (upper or lower) and the only other one is not.
  *
@@ -35,7 +40,7 @@ export type DetectCaseNameFromKeys<
  * ```
  */
 export function detectCaseNameFromKeys<
-  Object extends object,
+  const Object extends object,
 >(object: Object): DetectCaseNameFromKeys<Object> {
   return detectCaseNameFromArray(
     deepKeyOf(object),
@@ -57,15 +62,19 @@ export type ChangeKeysCase<
   : Object;
 
 type BuildItem<Item, FromCase extends CaseName, ToCase extends CaseName> =
-  | ChangeKeysCase<Extract<Item, object>, FromCase, ToCase>
-  | Exclude<Item, object>;
+  Item extends object ? ChangeKeysCase<
+      Item extends readonly unknown[] ? Writeable<Item> : Item,
+      FromCase,
+      ToCase
+    >
+    : Item;
 
 type BuildObject<
   SourceObject extends Record<PropertyKey, unknown>,
   FromCase extends CaseName,
   ToCase extends CaseName,
   Keys extends unknown[] = UnionToTuple<keyof SourceObject>,
-  Acc extends object = object,
+  Acc = unknown,
 > = Keys extends [
   infer Head extends PropertyKey,
   ...infer Tail extends unknown[],
@@ -118,7 +127,7 @@ type BuildTuple<
 /** Translates the keys within an object. The current case will be auto-detected if possible. */
 export function changeKeysCase<
   Object extends object,
-  ToCase extends CaseName,
+  const ToCase extends CaseName,
 >(
   object: Object,
   toCase: ToCase,
@@ -130,8 +139,8 @@ export function changeKeysCase<
 /** Translates the keys within an object from one provided case to another */
 export function changeKeysCase<
   Object extends object,
-  FromCase extends CaseName,
-  ToCase extends CaseName,
+  const FromCase extends CaseName,
+  const ToCase extends CaseName,
 >(
   object: Object,
   fromCase: FromCase,
