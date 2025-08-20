@@ -1,4 +1,4 @@
-import { changeCase } from "@stefan/change-case-ts"; // or just "change-case-ts" if installed from NPM;
+import { changeCase } from "@stefan/change-case-ts";
 
 const objectKeys = changeCase(
   {

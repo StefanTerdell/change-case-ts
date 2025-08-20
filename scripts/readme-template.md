@@ -18,27 +18,15 @@ The library also exports types correlating to the functions mentioned above (suc
 
 ## Examples
 
-### Changing the case of a string literal
+{{{examples/string-literal,Changing the case of a string literal}}}
 
-{{{examples/string-literal}}}
+{{{examples/object-keys,Changing the case of the keys in an object}}}
 
-### Changing the case of an objects' keys
+{{{examples/array-tuple-values,Changing the case of array or tuple values}}}
 
-{{{examples/object-keys}}}
+{{{examples/object-keys-in-array,Changing the keys of objects within an array}}}
 
-### Changing the case of array or tuple values
-
-{{{examples/array-tuple-values}}}
-
-### Changing the keys of objects within an array
-
-We can't use `changeCase` in this example, as it will try and change any string literal values within the given array instead of the keys in the object items, so we specifically use `changeKeysCase` instead to remove the ambiguity.
-
-{{{examples/object-keys-in-array}}}
-
-### Loading a .env-file and parsing with Zod
-
-{{{examples/env-file-and-zod}}}
+{{{examples/env-file-and-zod,Loading a dotenv-file and parsing with Zod}}}
 
 ## Supported cases
 
