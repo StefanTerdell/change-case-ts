@@ -6,8 +6,9 @@
   "tasks": {
     "dev": "deno run --watch src/lib.ts",
     "npm": "deno run -A scripts/build-npm.ts",
-    "dry": "deno test && deno task npm && deno publish --dry-run && cd npm && npm publish --dry-run",
-    "pub": "deno test && deno task npm && deno publish && cd npm && npm publish"
+    "readme": "deno run -A scripts/template-readme.ts",
+    "dry": "deno test && deno task npm && deno task readme && deno publish --dry-run && cd npm && npm publish --dry-run",
+    "pub": "deno test && deno task npm && deno task readme && deno publish && cd npm && npm publish"
   },
   "imports": {
     "@deno/dnt": "jsr:@deno/dnt@^0.42.3",
