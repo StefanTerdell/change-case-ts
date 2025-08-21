@@ -13,6 +13,8 @@
  * 
  * The library also exports types correlating to the functions mentioned above (such as `ChangeCase<Value, ToCase, FromCase>` etc.), as well as for detecting cases, case names as constants and as literal string types grouped into unions, etc.
  * 
+ * Last but not least are the functional variants of the case changing functions: `caseChanger`, `stringCaseChanger`, `arrayCaseChanger` and `keysCaseChanger`. These can be useful for instance when using `transform` with Zod schemas (`z.object({ FOO_BAR: z.string() }).transform(caseChanger("camelCase"))`).
+ * 
  * ## Installation
  * 
  * @example
@@ -107,15 +109,15 @@
  * 
  * ```typescript
  * import "@std/dotenv/load";
- * import { changeCase } from "@stefan/change-case-ts";
+ * import { caseChanger } from "@stefan/change-case-ts";
  * import z from "zod";
  * 
  * const envSchema = z.object({
  *   MY_ENV_VAR: z.string(),
  * });
  * 
- * const camelCaseEnvSchema = envSchema.transform((vars) =>
- *   changeCase(vars, "camelCase")
+ * const camelCaseEnvSchema = envSchema.transform(
+ *   caseChanger("camelCase"),
  * );
  * 
  * const env = camelCaseEnvSchema.parse(Deno.env.toObject());
