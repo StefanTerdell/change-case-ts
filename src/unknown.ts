@@ -56,13 +56,13 @@ export function detectCaseName(
 /** Changes the case of a provided type. */
 export type ChangeCase<
   Value,
-  FromCase extends CaseName,
   ToCase extends CaseName,
-> = Value extends string ? ChangeStringCase<Value, FromCase, ToCase>
+  FromCase extends CaseName,
+> = Value extends string ? ChangeStringCase<Value, ToCase, FromCase>
   : Value extends readonly unknown[]
-    ? ChangeArrayCase<Writeable<Value>, FromCase, ToCase>
+    ? ChangeArrayCase<Writeable<Value>, ToCase, FromCase>
   : Value extends { [key: string]: unknown }
-    ? ChangeKeysCase<Value, FromCase, ToCase>
+    ? ChangeKeysCase<Value, ToCase, FromCase>
   : Value;
 
 // overload
@@ -71,50 +71,48 @@ export function changeCase<const Value, const ToCase extends CaseName>(
   value: Value,
   toCase: ToCase,
 ): DetectCaseName<Value> extends infer FromCase extends CaseName
-  ? ChangeCase<Value, FromCase, ToCase>
+  ? ChangeCase<Value, ToCase, FromCase>
   : Value;
 
 // overload
 /** Changes the case of a provided value. */
 export function changeCase<
   const Value,
-  const FromCase extends CaseName,
   const ToCase extends CaseName,
+  const FromCase extends CaseName,
 >(
   value: Value,
-  fromCase: FromCase,
   toCase: ToCase,
-): ChangeCase<Value, FromCase, ToCase>;
+  fromCase: FromCase,
+): ChangeCase<Value, ToCase, FromCase>;
 
 // impl
 export function changeCase(
   value: unknown,
-  ...props: [CaseName, CaseName] | [CaseName]
+  toCase: CaseName,
+  fromCase: CaseName | undefined = detectCaseName(value),
 ) {
   if (!value) {
     return value;
   }
 
-  const toCase = props.length === 2 ? props[1] : props[0];
-  const fromCase = props.length === 2 ? props[0] : detectCaseName(value);
-
-  if (fromCase === undefined) {
+  if (fromCase === undefined || toCase === fromCase) {
     return value;
   }
 
   if (typeof value === "string") {
-    return changeStringCase(value, fromCase, toCase);
+    return changeStringCase(value, toCase, fromCase);
   }
 
   if (Array.isArray(value)) {
-    return changeArrayCase(value, fromCase, toCase);
+    return changeArrayCase(value, toCase, fromCase);
   }
 
   if (typeof value === "object") {
     return changeKeysCase(
       value as { [key: string]: unknown },
-      fromCase,
       toCase,
+      fromCase,
     );
   }
 

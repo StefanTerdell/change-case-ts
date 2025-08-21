@@ -51,28 +51,28 @@ export function detectCaseNameFromKeys<
 /** Deeply changes the keys (property names) of records within an object type (including arrays and tuples) */
 export type ChangeKeysCase<
   Object extends object,
-  FromCase extends CaseName,
   ToCase extends CaseName,
-> = Object extends unknown[] ? BuildArray<Object, FromCase, ToCase>
+  FromCase extends CaseName,
+> = Object extends unknown[] ? BuildArray<Object, ToCase, FromCase>
   : Object extends Record<PropertyKey, unknown> ? BuildObject<
       Object,
-      FromCase,
-      ToCase
+      ToCase,
+      FromCase
     >
   : Object;
 
-type BuildItem<Item, FromCase extends CaseName, ToCase extends CaseName> =
+type BuildItem<Item, ToCase extends CaseName, FromCase extends CaseName> =
   Item extends object ? ChangeKeysCase<
       Item extends readonly unknown[] ? Writeable<Item> : Item,
-      FromCase,
-      ToCase
+      ToCase,
+      FromCase
     >
     : Item;
 
 type BuildObject<
   SourceObject extends Record<PropertyKey, unknown>,
-  FromCase extends CaseName,
   ToCase extends CaseName,
+  FromCase extends CaseName,
   Keys extends unknown[] = UnionToTuple<keyof SourceObject>,
   Acc = unknown,
 > = Keys extends [
@@ -80,19 +80,19 @@ type BuildObject<
   ...infer Tail extends unknown[],
 ] ? BuildObject<
     SourceObject,
-    FromCase,
     ToCase,
+    FromCase,
     Tail,
     {
       [
         Key in
-          | (Head extends string ? ChangeStringCase<Head, FromCase, ToCase>
+          | (Head extends string ? ChangeStringCase<Head, ToCase, FromCase>
             : Head)
           | keyof Acc
       ]: Key extends keyof Acc ? Acc[Key] : BuildItem<
         SourceObject[Head],
-        FromCase,
-        ToCase
+        ToCase,
+        FromCase
       >;
     }
   >
@@ -100,26 +100,26 @@ type BuildObject<
 
 type BuildArray<
   SourceArray extends unknown[],
-  FromCase extends CaseName,
   ToCase extends CaseName,
+  FromCase extends CaseName,
 > = number extends SourceArray["length"] ? (
-    BuildItem<SourceArray[number], FromCase, ToCase>
+    BuildItem<SourceArray[number], ToCase, FromCase>
   )[]
-  : BuildTuple<SourceArray, FromCase, ToCase>;
+  : BuildTuple<SourceArray, ToCase, FromCase>;
 
 type BuildTuple<
   SourceTuple extends unknown[],
-  FromCase extends CaseName,
   ToCase extends CaseName,
+  FromCase extends CaseName,
   Acc extends unknown[] = [],
 > = SourceTuple extends [infer Head, ...infer Tail extends unknown[]]
   ? BuildTuple<
     Tail,
-    FromCase,
     ToCase,
+    FromCase,
     [
       ...Acc,
-      BuildItem<Head, FromCase, ToCase>,
+      BuildItem<Head, ToCase, FromCase>,
     ]
   >
   : Acc;
@@ -133,38 +133,34 @@ export function changeKeysCase<
   object: Object,
   toCase: ToCase,
 ): DetectCaseNameFromKeys<Object> extends infer FromCase extends CaseName
-  ? ChangeKeysCase<Object, FromCase, ToCase>
+  ? ChangeKeysCase<Object, ToCase, FromCase>
   : Object;
 
 // overload
 /** Translates the keys within an object from one provided case to another */
 export function changeKeysCase<
   Object extends object,
-  const FromCase extends CaseName,
   const ToCase extends CaseName,
+  const FromCase extends CaseName,
 >(
   object: Object,
-  fromCase: FromCase,
   toCase: ToCase,
-): ChangeKeysCase<Object, FromCase, ToCase>;
+  fromCase: FromCase,
+): ChangeKeysCase<Object, ToCase, FromCase>;
 
 // impl
 export function changeKeysCase(
   object: object,
-  ...props: [CaseName, CaseName] | [CaseName]
+  toCase: CaseName,
+  fromCase: CaseName | undefined = detectCaseNameFromKeys(object),
 ) {
-  const toCase = props.length === 2 ? props[1] : props[0];
-  const fromCase = props.length === 2
-    ? props[0]
-    : detectCaseNameFromKeys(object);
-
-  if (fromCase === undefined) {
+  if (fromCase === undefined || toCase === fromCase) {
     return object;
   }
 
   if (Array.isArray(object)) {
     return object.map((item) =>
-      typeof item === "object" ? changeKeysCase(item, fromCase, toCase) : item
+      typeof item === "object" ? changeKeysCase(item, toCase, fromCase) : item
     );
   }
 
@@ -175,8 +171,8 @@ export function changeKeysCase(
   return Object.keys(object).reduce((acc: Record<string, unknown>, key) => {
     const item = object[key as keyof typeof object];
 
-    acc[changeStringCase(key, fromCase, toCase)] = typeof item === "object"
-      ? changeKeysCase(item, fromCase, toCase)
+    acc[changeStringCase(key, toCase, fromCase)] = typeof item === "object"
+      ? changeKeysCase(item, toCase, fromCase)
       : item;
 
     return acc;

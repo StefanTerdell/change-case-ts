@@ -95,27 +95,27 @@ export function detectCaseNameFromArray<const Array extends unknown[]>(
 /** Changes the case of the items within a string literal union array or tuple type */
 export type ChangeArrayCase<
   Array extends unknown[],
-  FromCase extends CaseName,
   ToCase extends CaseName,
+  FromCase extends CaseName,
 > = number extends Array["length"]
   ? Array extends (infer Item)[]
-    ? (ChangeTupleCase<UnionToTuple<Item>, FromCase, ToCase>[number])[]
+    ? (ChangeTupleCase<UnionToTuple<Item>, ToCase, FromCase>[number])[]
   : Array
-  : ChangeTupleCase<Array, FromCase, ToCase>;
+  : ChangeTupleCase<Array, ToCase, FromCase>;
 
 type ChangeTupleCase<
   Tuple extends unknown[],
-  FromCase extends CaseName,
   ToCase extends CaseName,
+  FromCase extends CaseName,
   Acc extends unknown[] = [],
 > = Tuple extends [infer Head, ...infer Tail extends unknown[]]
   ? Head extends string ? ChangeTupleCase<
       Tail,
-      FromCase,
       ToCase,
-      [...Acc, ChangeStringCase<Head, FromCase, ToCase>]
+      FromCase,
+      [...Acc, ChangeStringCase<Head, ToCase, FromCase>]
     >
-  : ChangeTupleCase<Tail, FromCase, ToCase, [...Acc, Head]>
+  : ChangeTupleCase<Tail, ToCase, FromCase, [...Acc, Head]>
   : Acc;
 
 // overload
@@ -127,36 +127,32 @@ export function changeArrayCase<
   array: Array,
   toCase: ToCase,
 ): DetectCaseNameFromArray<Array> extends infer FromCase extends CaseName
-  ? ChangeArrayCase<Array, FromCase, ToCase>
+  ? ChangeArrayCase<Array, ToCase, FromCase>
   : Array;
 
 // overload
 /** Translates the cases of any string literals within an array-like value (tuple or array) from one provided case to another. */
 export function changeArrayCase<
   const Array extends unknown[],
-  const FromCase extends CaseName,
   const ToCase extends CaseName,
+  const FromCase extends CaseName,
 >(
   array: Array,
-  fromCase: FromCase,
   toCase: ToCase,
-): ChangeArrayCase<Array, FromCase, ToCase>;
+  fromCase: FromCase,
+): ChangeArrayCase<Array, ToCase, FromCase>;
 
 // impl
 export function changeArrayCase(
   array: unknown[],
-  ...props: [fromCase: CaseName, toCase: CaseName] | [toCase: CaseName]
+  toCase: CaseName,
+  fromCase: CaseName | undefined = detectCaseNameFromArray(array),
 ) {
-  const toCase = props.length === 2 ? props[1] : props[0];
-  const fromCase = props.length === 2
-    ? props[0]
-    : detectCaseNameFromArray(array);
-
-  if (fromCase === undefined) {
+  if (fromCase === undefined || toCase === fromCase) {
     return array;
   }
 
   return array.map((item) =>
-    typeof item === "string" ? changeStringCase(item, fromCase, toCase) : item
+    typeof item === "string" ? changeStringCase(item, toCase, fromCase) : item
   );
 }

@@ -6,19 +6,19 @@ import {
 import { assertEqualsT } from "./utils.ts";
 
 Deno.test("changeStringCase - camelCase to PascalCase", () => {
-  "HejHej" satisfies ChangeStringCase<"hejHej", "camelCase", "PascalCase">;
+  "HejHej" satisfies ChangeStringCase<"hejHej", "PascalCase", "camelCase">;
 
   assertEqualsT(
-    changeStringCase("hejHej", "camelCase", "PascalCase"),
+    changeStringCase("hejHej", "PascalCase", "camelCase"),
     "HejHej",
   );
 });
 
 Deno.test("changeStringCase - kebab-case to UPPERCASE", () => {
-  "AAAAA" satisfies ChangeStringCase<"a-a-a-a-a", "kebab-case", "UPPERCASE">;
+  "AAAAA" satisfies ChangeStringCase<"a-a-a-a-a", "UPPERCASE", "kebab-case">;
 
   assertEqualsT(
-    changeStringCase("a-a-a-a-a", "kebab-case", "UPPERCASE"),
+    changeStringCase("a-a-a-a-a", "UPPERCASE", "kebab-case"),
     "AAAAA",
   );
 });

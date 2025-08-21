@@ -7,23 +7,23 @@ import { type ChangeCase, changeCase } from "../src/unknown.ts";
 import { assertEqualsT } from "./utils.ts";
 
 Deno.test("changeCase - string", () => {
-  "HejHej" satisfies ChangeCase<"hejHej", "camelCase", "PascalCase">;
+  "HejHej" satisfies ChangeCase<"hejHej", "PascalCase", "camelCase">;
 
-  assertEqualsT(changeCase("hejHej", "camelCase", "PascalCase"), "HejHej");
+  assertEqualsT(changeCase("hejHej", "PascalCase", "camelCase"), "HejHej");
 });
 
 Deno.test("changeCase - tuple", () => {
   [123, true, "HelloWorld", null] satisfies ChangeCase<
     [123, true, "hello-world", null],
-    KebabCaseName,
-    PascalCaseName
+    PascalCaseName,
+    KebabCaseName
   >;
 
   assertEqualsT(
     changeCase(
       [123, true, "hello-world", null],
-      "kebab-case",
       "PascalCase",
+      "kebab-case",
     ),
     [
       123,
@@ -39,8 +39,8 @@ Deno.test("changeCase - keys", () => {
     HelloWorld: true,
   }) satisfies ChangeCase<
     { helloWorld: boolean },
-    CamelCaseName,
-    PascalCaseName
+    PascalCaseName,
+    CamelCaseName
   >;
 
   assertEqualsT(
@@ -48,8 +48,8 @@ Deno.test("changeCase - keys", () => {
       {
         helloWorld: true,
       },
-      "camelCase",
       "PascalCase",
+      "camelCase",
     ),
     {
       "HelloWorld": true,
@@ -58,7 +58,7 @@ Deno.test("changeCase - keys", () => {
 });
 
 Deno.test("changeCase - detect - string", () => {
-  "HejHej" satisfies ChangeCase<"hejHej", "camelCase", "PascalCase">;
+  "HejHej" satisfies ChangeCase<"hejHej", "PascalCase", "camelCase">;
 
   assertEqualsT(changeCase("hejHej", "PascalCase"), "HejHej");
 });

@@ -44,8 +44,8 @@ import {
 /** Translates a string literal type from one case to another */
 export type ChangeStringCase<
   String extends string,
-  FromCase extends CaseName,
   ToCase extends CaseName,
+  FromCase extends CaseName,
 > = FromCase extends ToCase ? String
   : WordsToString<ToCase, StringToWords<FromCase, String>>;
 
@@ -58,32 +58,28 @@ export function changeStringCase<
   string: String,
   toCase: ToCase,
 ): DetectCaseNameFromString<String> extends infer FromCase extends CaseName
-  ? ChangeStringCase<String, FromCase, ToCase>
+  ? ChangeStringCase<String, ToCase, FromCase>
   : String;
 
 // overload
 /** Translates a string from one provided case to another. */
 export function changeStringCase<
   const String extends string,
-  const FromCase extends CaseName,
   const ToCase extends CaseName,
+  const FromCase extends CaseName,
 >(
   string: String,
-  fromCase: FromCase,
   toCase: ToCase,
-): ChangeStringCase<String, FromCase, ToCase>;
+  fromCase: FromCase,
+): ChangeStringCase<String, ToCase, FromCase>;
 
 // impl
 export function changeStringCase(
   string: string,
-  ...props: [CaseName, CaseName] | [CaseName]
+  toCase: CaseName,
+  fromCase: CaseName | undefined = detectCaseNameFromString(string),
 ) {
-  const toCase = props.length === 2 ? props[1] : props[0];
-  const fromCase = props.length === 2
-    ? props[0]
-    : detectCaseNameFromString(string);
-
-  if (fromCase === undefined) {
+  if (fromCase === undefined || toCase === fromCase) {
     return string;
   }
 

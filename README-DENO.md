@@ -10,7 +10,7 @@ Useful for converting known models for interacting with external APIs.
 
 The main export of interest is `changeCase`. It's parameters are the value which to change, the optional source case, and the target case. If no source case is provided, the library will try and detect it. `changeCase` works for strings, tuple/array-values, and object keys, in that order. Use `changeArrayCase`, `changeStringCase`, or `changeKeysCase` to specify the target, if needed.
 
-The library also exports types correlating to the functions mentioned above (such as `ChangeCase<Value, FromCase, ToCase>` etc.), as well as for detecting cases, case names as constants and as literal string types grouped into unions, etc.
+The library also exports types correlating to the functions mentioned above (such as `ChangeCase<Value, ToCase, FromCase>` etc.), as well as for detecting cases, case names as constants and as literal string types grouped into unions, etc.
 
 ## Installation
 

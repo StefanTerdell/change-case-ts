@@ -10,15 +10,15 @@ import { assertEqualsT } from "./utils.ts";
 Deno.test("Change tuple case", () => {
   [123, true, "HelloWorld", null] satisfies ChangeArrayCase<
     [123, true, "hello-world", null],
-    KebabCaseName,
-    PascalCaseName
+    PascalCaseName,
+    KebabCaseName
   >;
 
   assertEqualsT(
     changeArrayCase(
       [123, true, "hello-world", null],
-      "kebab-case",
       "PascalCase",
+      "kebab-case",
     ),
     [
       123,

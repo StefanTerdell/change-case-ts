@@ -24,8 +24,8 @@ Deno.test("changeKeysCase - camelCase to PascalCase, recursive", () => {
     }],
   }) satisfies ChangeKeysCase<
     { helloWorld: boolean; nested: { prop: 0 }; arr: [{ hello: "again" }] },
-    CamelCaseName,
-    PascalCaseName
+    PascalCaseName,
+    CamelCaseName
   >;
 
   assertEqualsT(
@@ -37,8 +37,8 @@ Deno.test("changeKeysCase - camelCase to PascalCase, recursive", () => {
           }],
         }],
       }],
-      "camelCase",
       "PascalCase",
+      "camelCase",
     ),
     [{
       "Fee": [{
@@ -54,8 +54,8 @@ Deno.test("changeKeysCase - camelCase to PascalCase", () => {
     HelloWorld: true,
   }) satisfies ChangeKeysCase<
     { helloWorld: boolean },
-    CamelCaseName,
-    PascalCaseName
+    PascalCaseName,
+    CamelCaseName
   >;
 
   assertEqualsT(
@@ -63,8 +63,8 @@ Deno.test("changeKeysCase - camelCase to PascalCase", () => {
       {
         helloWorld: true,
       },
-      "camelCase",
       "PascalCase",
+      "camelCase",
     ),
     {
       "HelloWorld": true,
@@ -77,8 +77,8 @@ Deno.test("changeKeysCase - kebab-case to UPPER_SNAKE_CASE", () => {
     "HELLO_WORLD": true,
   }) satisfies ChangeKeysCase<
     { "hello-world": boolean },
-    KebabCaseName,
-    UpperSnakeCaseName
+    UpperSnakeCaseName,
+    KebabCaseName
   >;
 
   assertEqualsT(
@@ -86,8 +86,8 @@ Deno.test("changeKeysCase - kebab-case to UPPER_SNAKE_CASE", () => {
       {
         "hello-world": true,
       },
-      "kebab-case",
       "UPPER_SNAKE_CASE",
+      "kebab-case",
     ),
     {
       "HELLO_WORLD": true,
