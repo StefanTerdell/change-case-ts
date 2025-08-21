@@ -67,6 +67,32 @@ export type ChangeCase<
 
 // overload
 /** Changes the case of a provided value. */
+export function caseChanger<const ToCase extends CaseName>(
+  toCase: ToCase,
+): <const Value>(
+  value: Value,
+) => DetectCaseName<Value> extends infer FromCase extends CaseName
+  ? ChangeCase<Value, ToCase, FromCase>
+  : Value;
+
+// overload
+/** Changes the case of a provided value. */
+export function caseChanger<
+  const ToCase extends CaseName,
+  const FromCase extends CaseName,
+>(
+  toCase: ToCase,
+  fromCase: FromCase,
+): <const Value>(value: Value) => ChangeCase<Value, ToCase, FromCase>;
+
+// impl
+export function caseChanger(toCase: CaseName, fromCase?: CaseName) {
+  return (value: unknown) =>
+    fromCase ? changeCase(value, toCase, fromCase) : changeCase(value, toCase);
+}
+
+// overload
+/** Changes the case of a provided value. */
 export function changeCase<const Value, const ToCase extends CaseName>(
   value: Value,
   toCase: ToCase,

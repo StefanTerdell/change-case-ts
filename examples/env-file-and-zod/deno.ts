@@ -1,13 +1,13 @@
 import "@std/dotenv/load";
-import { changeCase } from "@stefan/change-case-ts";
+import { caseChanger } from "@stefan/change-case-ts";
 import z from "zod";
 
 const envSchema = z.object({
   MY_ENV_VAR: z.string(),
 });
 
-const camelCaseEnvSchema = envSchema.transform((vars) =>
-  changeCase(vars, "camelCase")
+const camelCaseEnvSchema = envSchema.transform(
+  caseChanger("camelCase"),
 );
 
 const env = camelCaseEnvSchema.parse(Deno.env.toObject());

@@ -125,6 +125,33 @@ type BuildTuple<
   : Acc;
 
 // overload
+/** Returns a function translating the keys within an object. The current case will be auto-detected if possible. */
+export function keysCaseChanger<const ToCase extends CaseName>(
+  toCase: ToCase,
+): <Object extends object>(
+  object: Object,
+) => DetectCaseNameFromKeys<Object> extends infer FromCase extends CaseName
+  ? ChangeKeysCase<Object, ToCase, FromCase>
+  : Object;
+
+// overload
+/** Returns a function translating the keys within an object from one provided case to another */
+export function keysCaseChanger<
+  const ToCase extends CaseName,
+  const FromCase extends CaseName,
+>(toCase: ToCase, fromCase: FromCase): <
+  Object extends object,
+>(object: Object) => ChangeKeysCase<Object, ToCase, FromCase>;
+
+// impl
+export function keysCaseChanger(toCase: CaseName, fromCase?: CaseName) {
+  return (object: object) =>
+    fromCase
+      ? changeKeysCase(object, toCase, fromCase)
+      : changeKeysCase(object, toCase);
+}
+
+// overload
 /** Translates the keys within an object. The current case will be auto-detected if possible. */
 export function changeKeysCase<
   Object extends object,

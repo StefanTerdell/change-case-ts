@@ -119,7 +119,34 @@ type ChangeTupleCase<
   : Acc;
 
 // overload
-/** Translates the cases of any string literals within an array-like value (tuple or array). The current case will be auto-detected if possible. */
+/** Returns a function translating the string literals within an array or tuple. The current case will be auto-detected if possible. */
+export function arrayCaseChanger<const ToCase extends CaseName>(
+  toCase: ToCase,
+): <Array extends unknown[]>(
+  array: Array,
+) => DetectCaseNameFromArray<Array> extends infer FromCase extends CaseName
+  ? ChangeArrayCase<Array, ToCase, FromCase>
+  : Array;
+
+// overload
+/** Returns a function translating the string literals within an array or tuple from one provided case to another */
+export function arrayCaseChanger<
+  const ToCase extends CaseName,
+  const FromCase extends CaseName,
+>(toCase: ToCase, fromCase: FromCase): <
+  Array extends unknown[],
+>(array: Array) => ChangeArrayCase<Array, ToCase, FromCase>;
+
+// impl
+export function arrayCaseChanger(toCase: CaseName, fromCase?: CaseName) {
+  return (array: unknown[]) =>
+    fromCase
+      ? changeArrayCase(array, toCase, fromCase)
+      : changeArrayCase(array, toCase);
+}
+
+// overload
+/** Translates the string literals within an array or tuple. The current case will be auto-detected if possible. */
 export function changeArrayCase<
   const Array extends unknown[],
   const ToCase extends CaseName,
@@ -131,7 +158,7 @@ export function changeArrayCase<
   : Array;
 
 // overload
-/** Translates the cases of any string literals within an array-like value (tuple or array) from one provided case to another. */
+/** Translates the string literals within an array or tuple from one provided case to another */
 export function changeArrayCase<
   const Array extends unknown[],
   const ToCase extends CaseName,

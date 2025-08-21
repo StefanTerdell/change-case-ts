@@ -50,6 +50,33 @@ export type ChangeStringCase<
   : WordsToString<ToCase, StringToWords<FromCase, String>>;
 
 // overload
+/** Returns a function translating the string within an string. The current case will be auto-detected if possible. */
+export function stringCaseChanger<const ToCase extends CaseName>(
+  toCase: ToCase,
+): <String extends string>(
+  string: String,
+) => DetectCaseNameFromString<String> extends infer FromCase extends CaseName
+  ? ChangeStringCase<String, ToCase, FromCase>
+  : String;
+
+// overload
+/** Returns a function translating the string within an string from one provided case to another */
+export function stringCaseChanger<
+  const ToCase extends CaseName,
+  const FromCase extends CaseName,
+>(toCase: ToCase, fromCase: FromCase): <
+  String extends string,
+>(string: String) => ChangeStringCase<String, ToCase, FromCase>;
+
+// impl
+export function stringCaseChanger(toCase: CaseName, fromCase?: CaseName) {
+  return (string: string) =>
+    fromCase
+      ? changeStringCase(string, toCase, fromCase)
+      : changeStringCase(string, toCase);
+}
+
+// overload
 /** Translates a string from one case to another. The current case will be auto-detected if possible. */
 export function changeStringCase<
   const String extends string,
