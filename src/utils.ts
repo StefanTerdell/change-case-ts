@@ -23,26 +23,29 @@ export function deepKeyOf<Object extends object>(
   object: Object,
 ): DeepKeyOf<Object>[] {
   return Array.isArray(object)
-    ? object.reduce((acc, curr) => {
-      if (typeof curr === "object") {
-        acc.push(...deepKeyOf(curr));
+    ? object.reduce((acc, item) => {
+      if (typeof item === "object" && item !== null) {
+        acc.push(...deepKeyOf(item));
       }
 
       return acc;
     }, [])
-    // @ts-expect-error:
-    : Object.keys(object ?? {}).reduce(
-      // @ts-expect-error:
-      (acc: string[], key: keyof Object & string) => {
+    : typeof object === "object" && object !== null
+    ? Object.keys(object).reduce(
+      (acc: unknown[], key: unknown) => {
         acc.push(key);
 
-        if (typeof object[key] === "object") {
-          // deno-lint-ignore no-explicit-any
-          acc.push(...deepKeyOf(object[key] as any) as any);
+        const value = object[key as keyof Object];
+
+        if (
+          typeof value === "object" && value !== null
+        ) {
+          acc.push(...deepKeyOf(value));
         }
 
         return acc;
       },
       [],
-    );
+    ) as DeepKeyOf<Object>[]
+    : [];
 }
