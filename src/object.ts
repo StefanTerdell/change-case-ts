@@ -83,12 +83,13 @@ type BuildObject<
     FromCase,
     ToCase,
     Tail,
-    & Acc
-    & {
+    {
       [
-        Key in Head extends string ? ChangeStringCase<Head, FromCase, ToCase>
-          : Head
-      ]: BuildItem<
+        Key in
+          | (Head extends string ? ChangeStringCase<Head, FromCase, ToCase>
+            : Head)
+          | keyof Acc
+      ]: Key extends keyof Acc ? Acc[Key] : BuildItem<
         SourceObject[Head],
         FromCase,
         ToCase
