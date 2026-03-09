@@ -4,6 +4,20 @@ This library contains functions and types to convert strings, tuple members and 
 
 While there are plenty of other packages that does the same at runtime, this library is built for full type support.
 
+Meaning ...
+
+```typescript
+changeCase({ hello_world: 123 }, "PascalCase");
+```
+
+... returns ...
+
+```json
+{ "HelloWorld": 123 }
+```
+
+... with full IDE/LSP support.
+
 Useful for converting known models for interacting with external APIs.
 
 ## Exports
